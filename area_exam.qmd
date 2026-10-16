@@ -1,0 +1,84 @@
+---
+title: "Computational analysis of structural variants in the human population"
+author: "Jacob Krol Area Exam"
+format:
+  revealjs:
+    css: theme.scss
+---
+
+<!-- budget 80 slides -->
+<!-- sections: i) mechanisms, ii) population, iii) cancer, iv) fusion, v) visualization -->
+<!-- ~15 slides per section -->
+<!-- presentation should be < 1 hr -->
+
+## Structural variant (SV)
+
+
+
+
+
+## SV types
+
+![](./img/sv-types.png)
+
+## Large base pair effect size of SVs
+
+Number of SVs per person seems underestimated
+![](./img/sv-effect_size.png)
+
+## SV mechanisms
+
+:::{.small}
+:::{.center}
+
+| Mechanism | SV types | Ex. pathology | Detection |
+| ----- | ----- | ----- | ----- |
+| NAHR | DEL, DUP, TRP, & INV | Charcot-Marie-Tooth; PMP22 DUP | FISH, CGH, & WGS |
+
+:::
+:::
+
+
+## NAHR DEL-DUP
+
+![](./img/nahr-del-dup.png)
+
+## NAHR DEL-DUP
+
+![](./img/nahr-del-dup-recombination-window.png)
+
+## NAHR DEL-DUP
+
+![](./img/nahr-del-dup-result.png)
+
+## NAHR genomic elements
+
+:::{.small}
+:::{.center}
+
+| Homologous element | Min. Seq. identitiy | Min. length | 
+| ----- | ----- | ----- |
+| Segmental duplication (SD) | 90% | 1kbp |
+| Long interspersed nuclear element | 96% | smaller than 1kbkp | 
+| Human endogenous retro virus HERV | 93% | 3kbp | 
+
+:::
+:::
+
+## NAHR risk
+
+:::{.small}
+:::{.center}
+
+- Risk $\propto$ length & Seq. id.
+- Risk $\frac{1}{\propto}$ distance between elements
+
+
+:::
+:::
+
+
+
+## Appendix
+
+- [Papers](https://docs.google.com/document/d/1ITRce8UJdXp1rDq0sjtYXVW5guFNf2iaTkP0BkiCHbA/edit?usp=sharing)

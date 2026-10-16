@@ -1,0 +1,3 @@
+image	reference
+sv-types.png	https://www.genome.gov/sites/default/files/inline-images/Genomic%20variation_Structral%20variants.png
+sv-effect_size.png	https://www.genome.gov/sites/default/files/inline-images/Genomic%20variation_Space%20filled%20comparison.png
