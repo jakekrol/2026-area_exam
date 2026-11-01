@@ -1098,9 +1098,10 @@ Split reads include breakpoint sequence
 :::{.center}
 Sections
 
-1.
-2.
-3.
+1. Jointly analyzing linear and graph reference SVs
+2. SV callset characteristics
+3. Mobile elements
+4. Breakpoint analysis
 :::
 
 ::: notes
@@ -1318,6 +1319,277 @@ A graph reference uses forking paths to include more than 1 possible sequences
 - Top AFR biased DEL
 - Bottom EAS biased DUP
 :::
+
+## SV sub-classes
+
+:::{.center}
+:::{.small}
+
+- Classes resolved by SV annotator (SVAN)
+- VNTR: variable number tandem repeat
+- ALU: ~300bp mobile element
+
+![](./img/1kg_sv_lr-3a.png){fig-align="center"}
+
+:::
+:::
+
+::: notes
+- VNTR is most common SV class for both DEL and INS
+- DEL would remove some section of tandem repeats
+- INS would add tandem repeats
+- High MAF suggests these variants are not only common in magnitude, but shared across individuals
+- Aside from VNTR, most other SV classes have low AF
+:::
+
+## INV sub-classes
+
+<br>
+
+![](./img/1kg_sv_lr-3b.png){fig-align="center"}
+
+:::notes
+- INV DUP more common than simple INV, tend to be smaller than other INV types
+- Overall, beyond mechanism and breakpoints, SV sub-classes have characteristic lengths and AF
+:::
+
+## L1 transduction activity
+
+:::{.center}
+:::{.small}
+Transduction: element is copied and inserted elsewhere
+:::
+
+![](./img/1kg_sv_lr-3a-l1.png){fig-align="center" width="80%"}
+![](./img/1kg_sv_lr-4a.png){fig-align="center" width="60%"}
+
+:::
+
+:::notes
+- L1: mobile element w/ characteristic ~6kbp length. includes a repeat region
+- Takeaway: some mobile elements are more active than others and adjancent seq copied along is biased to the origin of element
+- Tail transduction bias except for 3rd origin loci
+- Not in GRCh38 nor CHM13 means it was in the graph genome
+- Takeaway 2: Prior reports have many of these elements as "non-hot"/inactive, but they seem pretty active here
+:::
+
+## SVA transduction activity
+
+:::{.center}
+:::{.small}
+
+![](./img/1kg_sv_lr-3a-sva.png){fig-align="center" width="80%"}
+![](./img/1kg_sv_lr-4b.png){fig-align="center" width="50%"}
+
+:::
+- SVAs are about 2-3kbp length elements
+- Within element, there is bias for head/tail transduction, but across elements is well-distributed
+- Greater reference agreement compared to L1 activity
+- Subfamily is more entropic than L1
+:::
+
+## Singular 5' L1 transduction
+
+::::{.columns}
+:::{.column width="50%"}
+<br>
+
+![](./img/1kg_sv_lr-4a.png)
+:::
+:::{.column width="50%"}
+![](./img/1kg_sv_lr-4c.png)
+:::
+::::
+
+:::notes
+- Takeaway: Transduciton is slightly CHR biased and many events are near ends of chromosome
+- Source strand is reverse. Slight bias to forward strand targets
+:::
+
+## L1 transduction alignment
+
+![](./img/1kg_sv_lr-4de.png){fig-align="center"}
+
+:::notes
+- This L1 element is nearby a promoter and RNA-splicing may include the L1 element allow it to travel and recombine elsewhere
+- CAGE read counts measure TSS reads
+:::
+
+## Breakpoint analysis
+
+<br>
+
+![](./img/1kg_sv_lr-5a.png){fig-align="center"}
+
+:::notes
+- BLAST used to measure breakpoint homology
+- Word size is min. exact match
+:::
+
+## Breakpoint homology
+
+![](./img/1kg_sv_lr-5b-annot.png){fig-align="center"}
+
+:::notes
+- Some SVs have characteristic lengths and breakpoint homologies: SDs and Alu do. VNTR not so much
+
+:::
+
+## Breakpoint homology
+
+![](./img/1kg_sv_lr-5cd.png){fig-align="center"}
+
+:::notes
+- Takeaway: Homology by type agrees with mechanistic models
+- Example NHEJ (dark gray) has small homologies
+- SD (black) has large homologies; although these SVs are more rare
+- Takeaway 2: many SVs detected are smaller than median read size (20.3kbp)
+- Q: are smaller SVs more common or is this a technology bias?
+:::
+
+## Example DEL SV breakpoints
+
+<br>
+
+<br>
+
+![](./img/1kg_sv_lr-5ef.png){fig-align="center"}
+
+:::notes
+Again, ALU homologies are smaller than SD homologies
+:::
+
+## Recurrent ALU DEL
+
+<br>
+
+![](./img/1kg_sv_lr-5g.png){fig-align="center"}
+
+:::notes
+- Haplotype clustering by SNPs in a 100kbp window
+- Clusters were biased to continent: i) EAS, ii) AFR, iii) SAS
+- DEL SV present in clusters 2 and 3 and 1 outlier sample
+- "Recurrence-indicating" SNPs highlighted in red. Maybe LD?
+:::
+
+## 1KG SV LR summary
+
+
+:::{.center}
+:::{.small}
+<!-- 1. Jointly analyzing linear and graph reference SVs -->
+1. Genotyped and phased SVs using augmented graph
+2. SVs lengths were generally smaller than read length
+3. Mobile elements contribute ~1/3 total bp SV-driven variation in humans
+4. Large variation in mobile elements
+5. Breakpoint analysis agrees with mechanistic models
+:::
+:::
+
+::::{.columns}
+:::{.column width="33%"}
+
+<br>
+
+![](./img/1kg_sv_lr-2c.png){fig-align="center"}
+:::
+:::{.column width="33%"}
+
+<br>
+
+![](./img/1kg_sv_lr-3a.png){fig-align="center"}
+:::
+:::{.column width="33%"}
+![](./img/1kg_sv_lr-5cd.png){fig-align="center"}
+:::
+::::
+
+## SVs in pop. summary
+
+
+:::{.center}
+
+- SVs and SNPs often dependent (high LD)
+- SV location is constrained 
+- Mobile elements frequently cause SVs
+- Empirical breakpoints agrees with mechanistic hypotheses
+
+:::
+
+## SV-SNP depdence
+
+
+::::{.columns}
+:::{.column width="50%"}
+![](./img/1kg_sv_sr-1e.png){fig-align="center" width="70%"}
+:::
+:::{.column width="50%"}
+
+<br>
+
+![](./img/1kg_sv_sr-2e.png){fig-align="center" width="70%"}
+:::
+::::
+
+## SV location constraint
+
+<br>
+
+<br>
+
+::::{.columns}
+:::{.column width="70%"}
+![](./img/1kg_sv_sr-2ab.png){fig-align="center"}
+:::
+:::{.column width="30%"}
+![](./img/1kg_sv_lr-2f.png){fig-align="center"}
+:::
+::::
+
+:::notes
+- SR: SVs in variation intolerant coding regions (low RVIS) were less than expected at random
+- LR: total number of CDS altering SVs was lower than overlap with other elements
+:::
+
+## Mobile element SVs
+
+<br>
+
+![](./img/1kg_sv_lr-mobile_element_variation_underlined.png){fig-align="center"}
+
+## Empirical breakpoints match models
+
+:::{.center}
+
+![](./img/1kg_sv_lr-5b-annot.png){fig-align="center" width="60%"}
+![](./img/1kg_sv_sr-3c-labelled.png){fig-align="center" width="60%"}
+
+:::
+
+:::notes
+- Homology size of breakpoints depends on SV mechanism
+:::
+
+## SVs in pop. future work
+
+:::{.center}
+- Joint seq-mechanism callers
+- Variant prioritization
+- Mobile element detection and inspection
+:::
+
+:::notes
+- Leverage mechanistic models during call process rather than post-hoc annotation
+- Use large SV callsets as background control to prioritize SVs driving disease. If frequent in these cohorts, unlikely to drive disease
+- Mobile elements cause a significant amount of SVs, yet majority of callers focus on DELs and copy number variants
+:::
+
+
+
+
+
+
+
 
 
 
