@@ -424,7 +424,827 @@ Breakpoint sequence not leveraged
 
 # SVs in human population
 
+## Population SV analyses
 
+<br>
+
+:::{.small}
+:::{.center}
+
+| Paper | Cohort size | Variants | Objective |
+| ----- | ----- | ----- | ----- |
+| gnomAD | 125,748 exomes & 15,708 genomes | SNV, INDEL, & SV | Quantify gene mutation constraint | 
+| 1KG short read | 2,504 genomes | SV | Build diverse human SV set | 
+| 1KG long read | 1,019 genomes | SV | Improve human SV set quality via longer reads and graph reference genome |
+
+::::{.columns}
+:::{.column width="50%"}
+![](./img/gnomad.jpg){width="50%"}
+:::
+:::{.column width="50%"}
+![](./img/1000genomes.jpg){width="50%"}
+:::
+::::
+
+:::
+:::
+
+## Population SV findings
+
+<br>
+
+:::{.small}
+:::{.center}
+
+| Paper | Cohort size | Variants | Major finding |
+| ----- | ----- | ----- | ----- |
+| gnomAD | 125,748 exomes & 15,708 genomes | SNV, INDEL, & SV | Some genes essential, others dispensable | 
+| 1KG short read | 2,504 genomes | SV | Establish & describe global SV reference set | 
+| 1KG long read | 1,019 genomes | SV | Mobile elements SVs largely impact genome |
+
+<!-- ::::{.columns}
+:::{.column width="50%"}
+![](./img/gnomad.jpg){width="50%"}
+:::
+:::{.column width="50%"}
+![](./img/1000genomes.jpg){width="50%"}
+:::
+:::: -->
+
+:::
+:::
+
+## gnomAD
+
+:::{.center}
+:::{.small}
+
+Sections
+
+1. Dataset description
+2. Negative selection for pLoF variants
+3. pLoF-disease association
+:::
+:::
+
+::::{.columns}
+:::{.column width="33%"}
+![](./img/gnomad-f1ab.png){width="60%"}
+:::
+:::{.column width="33%"}
+![](./img/gnomad-f3abcd.png){width="100%"}
+:::
+:::{.column width="33%"}
+![](./img/GNOMAD-5a.png){width="100%"}
+:::
+::::
+
+:::notes
+
+Sections
+ 
+1. Sample geographic description (F1ab)
+2. Overlap of variants (F1e-h)
+3. LOFTEE annotation filter intuits with freq. and MAPS (F2ab)
+4. LoF SNVs are empirically constrained (F2cd)
+5. LOEUF scores agree with gene annotations (F3)
+6. Constraint is larger for genes expressed in many tissues and that interact w/ many proteins
+7. LOEUF relation to disease
+
+:::
+
+## Sample geography
+
+:::{.small}
+:::{.center}
+
+- 125,748 exomes & 15,708 genomes
+- EUR biased
+
+![](./img/gnomad-f1ab.png){fig-align="center" width="30%"}
+
+:::
+:::
+
+## Genome v exome
+
+<br>
+
+![](./img/genome-v-exome.png){fig-align="center"}
+
+## SNVs
+
+:::{.center}
+:::{.small}
+
+- SNVs: SNPs relative to reference genome
+- SNV analysis is conceptually transferrable to SVs
+
+![](./img/snp.png){fig-align="center"}
+
+:::
+:::
+
+## Complexity of 1bp context SNVs
+
+:::{.center}
+
+<br>
+
+- gnomAD considers SNVs with 1bp context
+  - A**C**G -> A**A**G OR A**T**G OR A**G**G
+- $4^3=64$ possible 3-mers
+- 3 possible SNVs per 3-mer
+- Total 3-mer SNVs is $64\cdot 3=192$
+
+
+
+:::
+
+## SNV-element overlap
+
+::::{.columns}
+:::{.column width="50%"}
+
+
+:::
+:::{.column width="50%"}
+![](./img/gnomad-f1cdefgh.png){fig-align="center" width="90%"}
+:::
+::::
+
+::: notes
+- Takeaways: i) splice site and nonsense mutations are relatively rare (gh) because ii) they are most likely to cause loss of function (cd).
+:::
+
+## SNV-element overlap
+
+::::{.columns}
+:::{.column width="50%"}
+
+:::{.small}
+- Missense: changes codon -> changes protein sequence
+- **pLoF**: predicted loss of function
+- **MAPS**: mutability adjusted proportion of singletons
+- CpG transition: CG -> TG
+- Transversion: Purine (GA) <-> Pyrimidine (CT)
+
+:::
+
+:::
+:::{.column width="50%"}
+![](./img/gnomad-f1cdefgh.png){fig-align="center" width="90%"}
+:::
+::::
+
+::: notes
+- Takeaways: i) splice site and nonsense mutations are relatively rare (gh) because ii) they are most likely to cause loss of function (cd).
+:::
+
+## MAPS intution
+
+:::{.center}
+Is SNV functional class enriched with rare (singleton) events?
+:::
+
+
+![](./img/gnomad-f1cdefgh.png){fig-align="center" width="90%"}
+
+## MAPS
+
+:::{.center}
+:::{.small}
+
+- MAPS: Mutability adjusted proportion of singletons
+- Aggregate singletons within SNV functional classes (e.g., pLoF or missense)
+- MAPS $\approx$ Observed singleton prop. $-\text{ }f$(expected singleton prop.)
+- MAPS > 0: more singletons observed than expected
+<!-- - Expected: derived from non-coding regions, weighted by mutation rate (freq.) -->
+
+![](./img/maps.png){fig-align="center" width="30%"}
+
+:::
+:::
+
+## pLoF negative selection
+
+:::{.center}
+
+<br>
+
+pLoF mutation rates are constrained to be rare 
+
+![](./img/gnomad-f1cdefgh.png){fig-align="center" width="40%"}
+
+:::
+
+## LoF annotation-based filtering
+
+![](./img/gnomad-f2ab.png){fig-align="center"}
+
+::: notes
+
+- Example annotation filters: UTR splice site
+- LOFTEE filtering agrees with ClinVar annotations and AF
+
+:::
+
+## RNA-splicing
+
+![](./img/rna-splicing.png){fig-align="center"}
+
+## LOFTEE
+
+:::{.center}
+
+LOFTEE filter rate intuits with ClinVar annots., AF, and MAPS
+
+![](./img/gnomad-f2ab.png){fig-align="center" width="40%"}
+
+:::
+
+## pLoF SNVs emprically under-observed
+
+
+![](./img/gnomad-f2cd.png){fig-align="center" width="50%"}
+
+## pLoF functional consequences
+
+![](./img/gnomad-f3abcd.png){fig-align="center" width="50%"}
+
+:::notes
+
+- Takeaways: Low LOEUF associated with essential genes
+:::
+
+## LOEUF
+
+:::{.small}
+:::{.center}
+
+- LOEUF: Loss-of-function observed expected upper bound fraction
+- Goal: mesaure intolerance to pLoF
+- Approach: score genes by pLoF SNV proportion
+- Metric: #Obs. pLoF SNVs / #Exp. pLoF SNVs; take upper bound CI
+
+![](./img/loeuf-ex.png){fig-align="center"}
+
+:::
+:::
+
+## pLoF functional consequences
+
+![](./img/gnomad-f3abcd.png){fig-align="center" width="50%"}
+
+:::notes
+
+- Takeaways: Low LOEUF associated with essential genes
+:::
+
+## Constrained genes PPI and expression
+
+<br>
+
+::::{.columns}
+:::{.column width="50%"}
+
+:::{.center}
+
+<br>
+
+$\downarrow$ LOEUF $\rightarrow$ $\uparrow$ PPI 
+
+<br>
+
+<br>
+
+$\downarrow$ LOEUF $\rightarrow$ $\uparrow$ tissue expression coverage
+:::
+
+:::
+:::{.column width="50%"}
+![](./img/gnomad-4ab.png){fig-align="center" width="75%"}
+:::
+::::
+
+
+## Transcript expression bias
+
+<br>
+
+:::{.center}
+Constrained RNA isoforms are highly expressed
+:::
+
+::::{.columns}
+:::{.column width="50%"}
+![](./img/rna-isoforms.png){fig-align="center"}
+:::
+:::{.column width="50%"}
+![](./img/gnomad-4c.png){fig-align="center"}
+:::
+::::
+
+::: notes
+- For each gene with >=1 constrained and >=1 unconstrained isoform, they measured expression fraction of constrained transcript
+:::
+
+## How apply mutational constraint metrics?
+
+<br>
+
+:::{.center}
+
+- Diseases/traits are enriched with constrained pLoF variants?
+- Relationship of heritability and mutational constraint?
+:::
+
+## De novo pLoF SNVs in disease
+
+:::{.center}
+:::{.small}
+
+- Rate ratio: #Disesase de novo SNVs / #Control de novo SNVs
+- More de novo pLoF SNVs in constrained genes occur in developmental/intellectual disability cases compared to control
+
+![](./img/GNOMAD-5a.png){fig-align="center" width="80%"}
+
+:::
+:::
+
+## Trait inheritance LOEUF association
+
+:::{.center}
+:::{.small}
+- Partitioning heritability enrichment
+  - \> 1 $\rightarrow$ trait heritability explained by SNVs greater than random chance
+
+![](./img/gnomad-5b.png){fig-align="center"}
+
+:::
+:::
+
+
+## Trait pLoF SNV association
+
+:::{.center}
+:::{.small}
+- Null: is trait NOT associated with pLoF variants?
+- Schizophrenia and educational attainment previously reported as pLoF associated
+
+:::
+:::
+
+![](./img/gnomad-5c.png)
+
+
+## gnomAD summary
+
+:::{.center}
+:::{.small}
+1. Massive exome dataset, yet biased to EUR ancestry
+2. Modeled mutational constraint by pLoF proportion metric (LOEUF) 
+3. LOEUF metric aligned with fundamental biology and diseases
+:::
+:::
+
+::::{.columns}
+:::{.column width="33%"}
+![](./img/gnomad-f1ab.png){width="60%"}
+:::
+:::{.column width="33%"}
+![](./img/gnomad-f3abcd.png){width="100%"}
+:::
+:::{.column width="33%"}
+![](./img/GNOMAD-5a.png){width="100%"}
+:::
+::::
+
+## 1KG sections
+
+:::{.center}
+Sections
+
+1. Introduce SV callset
+2. SV element overlap
+3. SV association with GWAS SNPs and expression
+4. Complex SVs and breakpoints
+:::
+
+::: notes
+1. SV summary (F1ab)
+2. Breakpoint accuracy (F1c)
+3. SVs shared across continental ancestry (F1d)
+4. SV-SNP linkage disequilibrium (F1e)
+5. SV overlap with elements (F2ab)
+6. SV expression association, eQTL (F2cd)
+7. SVs are in LD with lead eQTL SNP (F2e)
+8. SV hotspots (F3a)
+9. Complex DELs (F3b)
+10. Breakpoint analysis of complex SVs (F3cd)
+11. Complex INVs (F3e)
+
+:::
+
+## 1KG SV summary
+
+
+![](./img/1kg_sv_sr-1ab.png){fig-align="center"}
+
+::: notes
+- Most SVs were not in DGV DB
+- INVs were rare relative to copy number variants
+- Length of SVs discovered was constrained by tool(-parameters)
+:::
+
+## SV callers
+
+![](./img/1kg_sv_sr-stable-2.10.1.png){fig-align="center"}
+
+:::notes
+- Many DEL callers
+- Only 1 INS caller, yet many MEIs called: ~16k
+:::
+
+<!-- | Caller | SV type | SV len. range | 
+| ----- | ----- | ----- |
+| BreakDancer | DEL | (50,$10^6$) |
+| Delly | DEL, DUP, & INV | ? |
+| VariationHunter | DEL | ? |
+| CNVator | DEL | ? |
+| Read-depth (SSF) | DEL, DUP, mCNV |
+| Genome STRiP | DEL, DUP, mCNV |
+| Pindel | DEL |
+| MELT | MEI |
+| Dinumt | NUMT | -->
+
+## DEL breakpoint accuracy
+
+:::{.center}
+:::{.small}
+- "True" breakpoints: assembly (TIGRA) and long-reads (PacBio)
+- Low VAF SV breakpoints less accurate
+- Pindel accuracy; likley due to split-read reliance
+:::
+:::
+
+![](./img/1kg_sv_sr-1c.png){fig-align="center" width="70%"}
+
+## Discordant v split reads
+
+<br>
+
+:::{.center}
+Split reads include breakpoint sequence
+:::
+
+<br>
+
+![](./img/discordant-v-split-read.jpg){fig-align="center"}
+
+## SV ancestry
+
+
+![](./img/1kg_sv_sr-1d.png){fig-align="center" width="70%"}
+
+
+::: notes
+- Many SVs are present in > 1 continental ancestry
+- Some relatively common SVs (e.g., AC > 10 ) are present solely in AFR population; this population-distinctness is not observed for other pops.
+:::
+
+## SV SNP LD
+
+:::{.center}
+:::{.small}
+
+- **LD**: linkage disequilibrium
+  - $r^2 \approx 1 \rightarrow$ non-random co-occurence
+  - $r^2 \approx 0 \rightarrow$ random co-occurence
+- Here, LD measured for SVs and nearby SNPs
+
+:::
+:::
+![](./img/1kg_sv_sr-1e.png){fig-align="center" width="70%"}
+
+## SV element overlap
+
+- Expected: shuffled SVs intersecting with true elements
+- Approaches: i) partial overlap and ii) engulf overlap
+
+![](./img/1kg_sv_sr-2ab.png){fig-align="center"}
+
+## Partial v enguled overlap
+
+<br>
+
+<br>
+
+![](./img/partial-v-engulfed-overlap.png){fig-align="center"}
+
+## SV partial element overlap
+
+- Log enrichment: $<0 \rightarrow$ less overlap than expected
+- RVIS: residual variation intolerance score (functional variant intolernace)
+  - $\uparrow RVIS \rightarrow$ $\uparrow$ variant tolerance
+
+![](./img/1kg_sv_sr-2ab.png){fig-align="center"}
+
+:::notes
+- left: important elements less constrained for DELs 
+- left: higher VAF -> lower chance of element overlap
+- right: DELs are usually more constrained than other SV types
+:::
+
+## SV expression association
+
+:::{.center}
+:::{.small}
+
+- DUSP22: sig. eQTL variants overlaps coding seq.
+- ZNF43: sig. eQTL variants are upstream coding seq.
+
+:::
+:::
+
+![](./img/1kg_sv_sr-2cd.png){fig-align="center"}
+
+## SV expression association
+
+:::{.center}
+:::{.small}
+
+- eQTL: expression quantitative trait loci
+  - Null: no association of SV and gene expression
+  - $\downarrow p \rightarrow$ SV associate with gene expression change
+
+:::
+:::
+
+![](./img/1kg_sv_sr-2cd.png){fig-align="center"}
+
+## LD of lead eQTL SNPs and SVs
+
+:::{.small}
+:::{.center}
+- Hypothesis: sig. GWAS SNPs associated with SVs
+- Denom: # expected SVs in LD with lead eQTL
+  - Swap SV into another SV region with similar properties (e.g., VAF)
+  - Restrict LD search space to +/- Xbps from TSS
+  - Constrain haplotype length ($r^2$ [$\downarrow r^2 \rightarrow \uparrow$ haplotype len.])
+  - Is lead eQTL SNP in haplotype length? (yes $\rightarrow+1$)
+:::
+:::
+
+:::notes
+- When haplotype length is constrained, # SVs in LD with lead eQTL SNP greater than expected
+- The association of lead eQTL SNPs and SV is more likely the large the SV
+- Yes, it's possible that traits associated lead eQTL SNPs may actually explained by SVs
+:::
+
+![](./img/1kg_sv_sr-2e.png){fig-align="center"}
+
+## SV hotspots
+
+<br>
+
+
+![](./img/1kg_sv_sr-3a.png){fig-align="center"}
+
+:::notes
+- What does an SV hotspot look like
+- Here is an ~1Mbp region on CHR 19
+- There's many SVs and there's many segmental duplications likely driving SV
+- Surprisingly 13 genes intersect hotspot locus
+- PSG: pregnancy specific glycoprotein; essential for healthy pregnancy
+- Maybe the hotspot is overcome by redundancy
+- mCNVs here have some ancestry bias for biallelic DELs
+
+:::
+
+## Complex SVs
+
+![](./img/1kg_sv_sr-3abcde.png){fig-align="center"}
+
+:::notes
+- Specific classes of complex DELs and INVs were counted
+- Breakpoint sequences were analyzed
+- Show what alignments look like for complex SVs
+:::
+
+## Complex DELs
+
+![](./img/1kg_sv_sr-3b.png){fig-align="center"}
+
+:::notes
+- Top 4 complex SVs look like repair/replication errors of DNA breakage due to small SVs inside a larger DEL. Or maybe, mobile element INS
+- Most commonly DEL regions were filled with INS/DUP seq
+:::
+
+## Complex SV breakpoints
+
+:::{.center}
+- Red: junction seq. shared with breakpoint seq.
+- Green: same as red, but reverse complement
+- Blue: No similar neighboring seq. (INS)
+:::
+
+![](./img/1kg_sv_sr-3c-labelled.png){fig-align="center"}
+
+::: notes
+- These are probably not NAHR because the homology is relatively small
+:::
+
+## Complex SV alignment
+
+<br>
+
+![](./img/1kg_sv_sr-3d-labeled.png){fig-align="center"}
+
+## DUPs are commonly INVerted
+
+<br>
+
+![](./img/1kg_sv_sr-3e.png){fig-align="center"}
+
+## 1KG SV SR summary
+
+:::{.center}
+:::{.small}
+- ~1/2 SV callset novel; samples less biased to EUR than gnomAD
+- Negative selection for SVs overlapping conserved regions
+- SVs association with trait SNPs (LD) and gene expression (eQTL)
+- Complex SV classes recur with characterisitc breakpoint signatures
+:::
+:::
+
+:::{.columns}
+:::{.column width="25%"}
+![](./img/1kg_sv_sr-1a.png){fig-align="center"}
+:::
+:::{.column width="25%"}
+![](./img/1kg_sv_sr-2b.png){fig-align="center"}
+:::
+:::{.column width="25%"}
+![](./img/1kg_sv_sr-2e.png){fig-align="center"}
+:::
+:::{.column width="25%"}
+![](./img/1kg_sv_sr-3b.png){fig-align="center"}
+:::
+::::
+
+## 1KG SV LR sections
+
+:::{.center}
+Sections
+
+1.
+2.
+3.
+:::
+
+::: notes
+1. Geographic distribution (F1a)
+2. Depth (F1b)
+3. SV analysis pipeline (F1c)
+4. SV allele freq. (F2a)
+5. SV lengths (F2b)
+6. Low AF SVs were missing from graph. (F2c)
+7. SV count by ancestry (F2de)
+8. SV element intersection (F2f)
+9. Within continental ancestry Fst (F2g)
+10. Example Svs biased to AFR & EAS demographics (F2h)
+11. Complex SVs (F3ab)
+12. Transduction activity (F4abcde)
+13. Breakpoint analysis (F5abcdef)
+14. Recurrent SV (F5g)
+:::
+
+## Geographical ancestry
+
+<br>
+
+:::{.center}
+Mixed sample geography avoids common EUR bias
+:::
+
+![](./img/1kg_sv_lr-1a.png){fig-align="center"}
+
+## Long read (LR) depth and size
+
+:::{.center}
+:::{.small}
+- ~16.9x median coverage
+  - $\uparrow$ coverage $\rightarrow$ $\uparrow$ sensitivity to mosaic variants
+- ~20.3kbp median read length
+  - 100x larger than typical short-read
+  - SVs can be contained in a single read
+- LR is single-end, not paired-end
+:::
+:::
+
+![](./img/1kg_sv_lr-1b.png){fig-align="center"}
+
+## Single v paired-end seq.
+
+![](./img/single-v-paired-end-seq.png){fig-align="center"}
+
+## Augmented graph SV analysis
+
+:::{.center}
+
+1. Align to 3 different references (GRCh38, CHM13, and HPRC)
+
+:::{.small}
+- Linear: GRCh38 and CHM13
+- Graph: HPRC
+:::
+:::
+
+![](./img/1kg_sv_lr-1c.png){fig-align="center"}
+
+:::notes
+A graph reference uses forking paths to include more than 1 possible sequences
+:::
+
+## Augmented graph SV analysis
+
+:::{.center}
+
+2. Call SVs
+
+:::{.small}
+- Linear: Delly and Sniffles
+- Graph: SVarp
+:::
+:::
+
+![](./img/1kg_sv_lr-1c.png){fig-align="center"}
+
+## Augmented graph SV analysis
+
+:::{.center}
+3. Create pseudo-haplotypes
+
+:::{.small}
+- Pool SVs by caller
+- Create haplotypes such that no SVs overlap within haplotype
+- Use bcftools consensus to resolve sequence
+- Q: Beyond overlap, what criteria assign SVs to specific haplotypes?
+:::
+:::
+
+| Caller | #Pseudo-haplotypes |
+| :-----: | :-----: |
+| Delly | 26 |
+| Sniffles | 69 |
+| SVarp | 117 |
+
+<!-- ![](./img/1kg_sv_lr-1c.png){fig-align="center"} -->
+
+## Genotype v haplotype
+
+:::{.center}
+:::{.small}
+- Genotype: which alleles present and how many?
+  - Ex: A/A homozygous SNP at CHR4:123456bp $\rightarrow$ genotype = "1/1"
+- Haplotype: which alleles physically linked on singular chromosome?
+  - Ex: SNPs at bp 4 (C>A) & 7 (A>C)  are "phased" to same physical chromosome
+:::
+:::
+
+![](./img/genotype-v-haplotype.webp){fig-align="center"}
+
+## Augmented graph SV analysis
+
+:::{.center}
+4. Inject pseudo-haplotype seq. paths
+:::
+
+<br>
+
+![](./img/1kg_sv_lr-1c.png){fig-align="center"}
+
+## Augmented graph SV analysis
+
+:::{.center}
+5. Genotype (Giggles) and phasing (SHAPEIT5)
+:::
+
+<br>
+
+![](./img/1kg_sv_lr-1c.png){fig-align="center"}
+
+## SV allele frequency
+
+![](./img/1kg_sv_lr-2a.png){fig-align="center"}
+
+:::notes
+- About a 1/4 of SVs are singletons
+- About 1/2 are between AC>2 and AF < 50%
+- I do not think this plot demonstrates AFR contributes more SVs than other pops.
+  - Before AFR samples, about 80% of total SVs are already included
+:::
 
 ## Appendix
 
