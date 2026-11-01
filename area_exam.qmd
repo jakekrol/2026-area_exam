@@ -1244,7 +1244,82 @@ A graph reference uses forking paths to include more than 1 possible sequences
 - About 1/2 are between AC>2 and AF < 50%
 - I do not think this plot demonstrates AFR contributes more SVs than other pops.
   - Before AFR samples, about 80% of total SVs are already included
+- Maybe compare w/ SR here
 :::
+
+## SV length
+
+![](./img/1kg_sv_lr-2b.png){fig-align="center"}
+
+::: notes
+- Many SVs are smaller than read length
+- SV count for illumina was subsetted to long read samples
+- Mobile element driven SVs are characterized by length peaks
+- Maybe compare w/ SR here
+:::
+
+## Graph augment adds low VAF SVs
+
+![](./img/1kg_sv_lr-2c.png){fig-align="center"}
+
+## SV count by continent and GT
+
+<br>
+
+![](./img/1kg_sv_lr-2de.png){fig-align="center"}
+
+:::notes
+- Counted num. hom/het SVs per individual
+- AFR highest SV count
+- 2nd place swaps from EAS to AMR for HOM > HET
+:::
+
+## SV element overlap
+
+<br>
+
+![](./img/1kg_sv_lr-2f.png){fig-align="center"}
+
+:::notes
+- most SVs not intersecting genes (intergenic)
+- SV that do intersect coding seqs. have low allele frequency
+- maybe compare with SR here
+:::
+
+## Within continent SV mixing
+
+:::{.center}
+:::{.small}
+- $F_{st}$: fixation index
+  - $F_{st} \approx 0 \rightarrow$ SVs are well-mixed across continents
+  - $F_{st} \approx 1 \rightarrow$ SVs are biases to given continent
+:::
+:::
+
+::::{.columns}
+:::{.column width="50%"}
+![](./img/1kg_sv_lr-2g.png){fig-align="center"}
+:::
+:::{.column width="50%"}
+<br>
+![](./img/1kg_sv_lr-1a.png){fig-align="center"}
+:::
+::::
+
+:::notes
+- AFR & EAS have relatively more SVs that are biased to their continent
+:::
+
+## SVs with continent bias
+
+![](./img/1kg_sv_lr-2h.png){fig-align="center"}
+
+:::notes
+- Top AFR biased DEL
+- Bottom EAS biased DUP
+:::
+
+
 
 ## Appendix
 
