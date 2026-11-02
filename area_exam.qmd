@@ -1584,7 +1584,148 @@ Again, ALU homologies are smaller than SD homologies
 - Mobile elements cause a significant amount of SVs, yet majority of callers focus on DELs and copy number variants
 :::
 
+## Chromothripsis v chromoplexy
 
+:::{.small}
+:::{.center}
+
+![](./img/chromothripsis-v-chromoplexy.webp){fig-align="center" width="50%"}
+
+| SV | Chromosome(s) | Copy number change |
+| ----- | ----- | ----- | ----- | ----- |
+| Chromothripsis | 1 or few | Relatively high |
+| Chromoplexiy | Usually multiple | Relatively low |
+
+:::
+:::
+
+## PCAWG
+
+:::{.center}
+Sections
+
+1. Variant caller evaluation
+2. Driver mutations
+3. Clustered variant events
+4. Germline and somatic variant associations
+5. Telomere mutations
+:::
+
+:::notes
+1. Variant caller evaluation (F1)
+2. Driver mutations (F2,3)
+3. Clustered variant event occurence and characteristics (F4,5)
+4. Germline and somatic variant associations (F6)
+5. Telomere mutations (F7)
+
+:::
+
+## Variant caller evaluation
+
+:::{.center}
+For 50 samples, deep sequencing of target (variant-site) probes
+:::
+
+![](./img/pcawg-1ab.png){fig-align="center"}
+
+::: notes
+Methods with good precision and recall (light blue) were selected
+:::
+
+## Low VAF challenges
+
+<br>
+
+![](./img/pcawg-1cd.png){fig-align="center"}
+
+:::notes
+- Rare variants (low VAF) are hard to detect and false positives are common
+- intuitively, signal-noise ratio is smaller
+:::
+
+## Driver mutations
+
+![](./img/pcawg-2a.png){fig-align="center"}
+
+:::notes
+- Takeaway: severe cases have many types of SVs
+- Takeaway 2 (bar): most patients have driver coding point mutation or SCNA (gene variants)
+- angle separates samples
+- outer:  sorted driver mutations per sample
+- ii) Whole genome duplication presence (both homologous chromosomes are duplicated, could be just one pair)
+- iii) Tumor type (color)
+- iv) # driver CNVs
+- v) # driver non-CNV rearrangements
+- vi) # driver coding point mutations
+- vii) # driver non-coding mutations
+- viii) # Pathogenic germline variants
+:::
+
+## Gene driver variants
+
+![](./img/pcawg-2b.png){fig-align="center"}
+
+:::notes
+- Notable: TP53 is most common driver mutation, TERT also common (telomere repair)
+- Notable: cis-activating GR (GR=genomic rearrangement) prostate only ERG-TMPRSS2
+- Notable: fusion BRAF in melanoma and CNS-piloastro
+- Notable: many drivers deactivate tumor suppressing genes (TSG, light blue)
+:::
+
+## TSG DEL drivers
+
+:::{.center}
+TSG: tumor suppressor gene
+:::
+
+![](./img/pcawg-2c.png){fig-align="center"}
+
+:::notes
+- Bottom value: # patients w/ bi-allelic DEL DIV total # patients w/ somatic VAR in gene
+- Notable: TP53 usually only heterozygous DEL
+- Takeaway: homozgyous DEL is relatively uncommon compared to heterozgyous DELs
+:::
+
+## Missing driver investigation
+
+:::{.center}
+- 4/181 driver-free samples had >5% normal contamination
+- DeTiN tool re-analyzed and found drivers
+:::
+
+![](./img/pcawg-3abc.png){fig-align="center"}
+
+:::notes
+- Takeaways: i) some samples' drivers were rescued after addressing tumor-in-normal contamination (a)
+- Takeaways: 2) for TERT-sensitive cancers many samples depth and purity was estimated insufficient to detect TERT mutations (bc)
+- a) contamination measured by variant allele frequency difference in tumor and normal
+- b) Estimated mutation detection sensitivity given purity and depth
+- Again, this was only done for samples w/o drivers
+- c) TERT detection sensitivity in cancers where TERT is commonly mutated
+
+:::
+
+## Clustered variant events
+
+![](./img/pcawg-4ab.png){fig-align="center"}
+
+:::notes
+- Takeaway a: Most kataaegis events were APOBEC3 type, except for lymphatic cancers
+- Takeaway a: chromoplexy less common than kataegis
+- Takeaway a: chromothripsis high variance across tumor types
+- Takeaway b: neighboring kataegis events are rare, but some occur near driver genes
+- b: radius inv prop to dist of kataegis events
+- b: each dot is a kataegis event and its radial location is the distance to next event (sequential)
+- APOBE3B-type means up-regulated
+:::
+
+## Chromoplexy and chromothripsis
+
+:::notes
+- Takeaway c: neighboring chromoplexy events are even more rare than kataegis events
+  - Fewer dots in shaded region
+- Takeaway d: chromothripsis events with smaller avg breakpoint in the SV cluster tend to cause CNV of driver genes
+:::
 
 
 
