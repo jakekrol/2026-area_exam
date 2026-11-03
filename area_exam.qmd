@@ -1,5 +1,5 @@
 ---
-title: "Computational analysis of structural variants in the human population"
+title: "Population-scale analysis of human genetic variation"
 author: "Jacob Krol Area Exam"
 format:
   revealjs:
@@ -1516,7 +1516,7 @@ Again, ALU homologies are smaller than SD homologies
 
 :::
 
-## SV-SNP depdence
+## SV-SNP dependence
 
 
 ::::{.columns}
@@ -1721,12 +1721,739 @@ TSG: tumor suppressor gene
 
 ## Chromoplexy and chromothripsis
 
+<br>
+
+![](./img/pcawg-4cd.png){fig-align="center"}
+
 :::notes
 - Takeaway c: neighboring chromoplexy events are even more rare than kataegis events
   - Fewer dots in shaded region
 - Takeaway d: chromothripsis events with smaller avg breakpoint in the SV cluster tend to cause CNV of driver genes
 :::
 
+## Sub-clonal events occur later
+
+![](./img/tumor-subclones.jpg){fig-align="center"}
+
+:::notes
+Clonal: mutation in most tumor cells
+Subclonal: mutation in subset of tumor cells
+:::
+
+## Clustered event timing
+
+![](./img/pcawg-5a.png){fig-align="center"}
+
+:::notes
+- Kataegis usually happened later
+- Chromothripsis sometimes happend early
+- Takeaway: more likely that chromothripsis is driving than kataegis
+:::
+
+## Chromothripsis at driver genes
+
+![](./img/pcawg-5b.png){fig-align="center"}
+
+:::notes
+- Takeaway: chromothripsis in melanoma led to copy number gains of TERT (telomere repair) and CCND1 (promotes S phase)
+- A lot SNPs (dots) and SVs (arcs)
+:::
+
+## Germline-somatic association
+
+![](./img/pcawg-6a.png){fig-align="center"}
+
+:::notes
+- Takeaway: 30 kbp germline DEL known to increase breast cancer risk
+:::
+
+
+## BRCA1 PTV germline enriched somatic SVs
+
+![](./img/pcawg-6b.png){fig-align="center"}
+
+:::notes
+- BCRA1 (DNA repair) PTV SNPs are rare in germline, but when they do appear, many somatic SVs called template INS occurs
+- Takeaway: Long read sequencing example of somatic INS+DUP complex SV
+:::
+
+## PTVs increasing somatic CpG SNPs
+
+![](./img/pcawg-6c.png){fig-align="center"}
+
+:::notes
+- Blue (BRCA2): germline PTV led to lower somatic mutation rates
+- Red (MBD4): germlinePTV led to higher somatic mutation rates
+- P-values are from regression two-sided hyp. test
+:::
+
+## Germline L1 elements active in cancer
+
+![](./img/pcawg-6d.png){fig-align="center"}
+
+:::notes
+- Takeaway: L1 loci previously known as hot have highest ranking individual contributions, but many non-hot elements contribute to somatic SVs too
+:::
+
+## Telomere tumor patterns
+
+:::{.center}
+Features: #SVs, length tumor/normal, etc.
+:::
+
+![](./img/pcawg-7ab.png){fig-align="center"}
+
+:::notes
+- T: tumor
+- N: normal
+- Takeaway: Most tumor samples fall into the T4 cluster
+- They analyzed telomere gene mutations for these clusters
+:::
+
+## Telomere cluster causes
+
+![](./img/pcawg-7cd.png){fig-align="center"}
+
+:::notes
+- Takeaway c: cluster 4 mostly explained by SNP TERT mutations and RB1 (TSG) mutations
+- Takeaway d: TERT promoter SNVs or ATRX/DAXX mutations were common mutations in cancers known to have abnormal telomere regulation
+:::
+
+## PCAWG summary
+
+<!-- 1. Variant caller evaluation
+2. Driver mutations
+3. Clustered variant events
+4. Germline and somatic variant associations
+5. Telomere mutations -->
+
+:::{.center}
+1. Selected SNP/SV callers by evaluating a pilot sample set
+2. Driver mutations vary by tumor type
+3. Clustered event (e.g., chromothripsis) timing variation
+4. Germline-somatic variant association
+5. Telomere mutations
+:::
+
+::::{.columns}
+:::{.column width="33%"}
+![](./img/pcawg-2b.png){fig-align="center"}
+:::
+:::{.column width="33%"}
+![](./img/pcawg-5a.png){fig-align="center"}
+:::
+:::{.column width="33%"}
+![](./img/pcawg-7cd.png){fig-align="center"}
+:::
+::::
+
+## PCAWG SV
+
+:::{.center}
+Sections
+
+1. SV types and tumor frequency
+2. Template insertion SVs
+3. SV features and signatures
+:::
+
+## SV types
+
+![](./img/pcawg_sv-1.png){fig-align="center"}
+
+:::notes
+- "cut/copy" -> loss/gain in copy number
+- "simple/complex". complex usually has >2  breakpoints
+- SVs worth discussing
+  - local n-jump: DUPs and INVs
+  - Cyclic template INS: copy number gains with shared-chaining breakpoints
+:::
+
+## SV tumor frequency
+
+![](./img/pcawg_sv-2.png){fig-align="center"}
+
+:::notes
+- Takeaway a): Complex/unclassified SVs were typically most abundant, ii) DEL and tandem DUP were frequent simple types, and iii) some cancers with only a few samples had highest SV count (top value per subplot is # samples)
+- a) subpanels sorted by total SV count
+- Takeaway b): Esophagal cancers had a lot DEL, Tandem DUP, and complex SVs. And DELs dominanated highest SV count samples of Ovary
+- The majority of this paper is describing a few categories of complex SVs
+:::
+
+## Template insertion SVs
+
+![](./img/pcawg_sv-3abc.png){fig-align="center"}
+
+:::notes
+- a) Cycle: the sequence of SV breakpoints returns to source and the source copy is also gained
+- b) Chain: sequence of gains, but no return to source
+- c) Bridge: same as cycle, but the source copy is not gained (neutral)
+- Sequence path is resolved purely by breakpoints
+- Q: how do we know breakpoint chains are not just due to hotspot regions?
+:::
+
+## Liver TERT cycles
+
+![](./img/pcawg_sv-3de.png){fig-align="center"}
+
+:::notes
+- Hypothesis: TERT amplification and inc. telomere resistance may be due to these template insertion cycle events
+:::
+
+## Local n-jumps
+
+![](./img/pcawg_sv-4ab.png){fig-align="center"}
+
+:::notes
+- Local n-jumps result in a copy # gain with an inverted segment
+- Takeaway: high counts of various jump types in different cancers
+:::
+
+## Bimodal size distributions
+
+![](./img/pcawg_sv-5ab.png){fig-align="center"}
+
+:::notes
+- Takeaway: DEL and template INS SVs concentrate at two modes: 1kbp and 100kbp
+- 1kbp SVs may be due to mobile elements like L1 or SVA
+- 100kbp is quite large and not easily explained by mobile elements
+:::
+
+## SV properties
+
+![](./img/pcawg_sv-5c.png){fig-align="center"}
+
+:::notes
+- Takeaway: DEL and DUP often have opposite median shifts
+- Takeaway 2: small DELs left less likely than random, but large DELs more likley than random w.r.t gene regions
+- star: means significant KS hypothesis test (not-uniform)
+- LAD: lamine association domain: associated with nuclear envelope management
+- Compared with quantile distribution of random SV placement
+:::
+
+## Breakpoint microhomology
+
+![](./img/pcawg_sv-5d.png){fig-align="center"}
+
+:::notes
+- Takeaway: smaller breakpoint homology was more likely
+- Unclear if peaks occured at bp sizes > 50 which might be due to mobile elements
+:::
+
+## Breakpoint element enrichment
+
+![](./img/pcawg_sv-5e.png){fig-align="center"}
+
+:::notes
+- Takeaway 1: Enrichment of transduction/repeat elements (mobile/homologous)
+- Takeaway 2: Depletion of SVs connecting fragile regions and genes
+:::
+
+## SV signatures
+
+![](./img/pcawg_sv-6a.png){fig-align="center"}
+
+:::notes
+- Takeaway: Tandem DUPs often occur with other SV types
+- Takeaway: Chromoplexy events are more often cyclic events rather than chains. Meaning the source chromosome also has copy gain
+- Takeaway: INVs are crucial for fold-backs (Breakage fusion bridge)
+- Columns: signatures
+- Rows: SV type, size, timing
+- Bar: how much SV class contributes to signature
+:::
+
+## Signature and tumor gene association
+
+<br>
+
+![](./img/pcawg_sv-6b.png){fig-align="center"}
+
+:::notes
+- Takeaway: BRCA1 associated with both DEL and DUP sigs, while BRCA2 is only associated with DEL sig. Again, these are both DNA repair genes
+- Regression hypothesis test. Regresss signature intensity onto binary variable of mutation status
+:::
+
+## PCAWG SV summary
+
+<!-- 1. SV types and tumor frequency
+2. Template insertion SVs
+3. SV features and signatures -->
+
+:::{.center}
+:::{.small}
+1. Description and quantification of complex SVs: template insertions and n-jumps
+2. Signatures abstractly summarize composed SVs and features
+:::
+:::
+
+::::{.columns}
+:::{.column width="50%"}
+![](./img/pcawg_sv-1.png){width="70%"}
+:::
+:::{.column width="50%"}
+![](./img/pcawg_sv-6a.png)
+:::
+::::
+
+## SV cancer review
+
+:::{.center}
+Sections
+
+1. SV discovery methods
+2. Driver SVs
+3. Mechanisms
+:::
+
+## SV discovery methods
+
+:::{.small}
+:::{.center}
+
+| Method | Advantage | Limitation |
+| ----- | ----- | ----- |
+| Karyotyping | Chromosome-level & large SV events | Low res. |
+| Array CGH | Custom probes | Incomplete coverage |
+| SR WGS | High res. | Small read-context & mapping issues |
+| LR WGS | High res. & large read-context | Worse base pair accuracy |
+| SC | Phasing | Cell sampling bias & limited tooling |
+:::
+:::
+
+![](./img/sv_cancer_review-1.png){fig-align="center" width="50%"}
+
+
+## SV drivers and type
+
+![](./img/sv_cancer_review-2.png){fig-align="center"}
+
+:::notes
+- Takeaway a): Majority of driver SVs directly affect genes
+- Takeaway b): Some cancers have higher SV avg. per sample (top 2/3) than other cancers (bottom 1/3)
+:::
+
+## SV mechanisms
+
+![](./img/sv_cancer_review-3.png){fig-align="center"}
+
+:::notes
+- Takeaway a): Some SVs have temporal dependence on precursor SVs
+  - Ex: C) Telomere event -> fusion ->  dicentric chromosome -> BFB
+:::
+
+## SV cancer review summary
+
+:::{.center}
+1. SV discovery method tradeoff
+2. Common driver types: coding SNPs and copy # changes
+3. SVs involving DNA repair genes have cascading effects
+:::
+
+::::{.columns}
+:::{.column width="33%"}
+![](./img/sv_cancer_review-1.png)
+:::
+:::{.column width="33%"}
+![](./img/sv_cancer_review-2.png){width="80%"}
+:::
+:::{.column width="33%"}
+![](./img/sv_cancer_review-3.png)
+:::
+::::
+
+## Summarize sections
+
+# Gene fusions
+
+## PCAWG RNA
+
+:::{.center}
+Sections
+
+1. eQTL variants
+2. Alternative splicing
+3. Gene fusions
+4. DNA v RNA drivers
+:::
+
+## eQTL variants
+
+![](./img/pcawg_rna-1a.png){fig-align="center"}
+
+:::notes
+- Takeaway: for germline eQTL variants, the overlap with epigenetic regions was usually not sig. diff. from GTEx (non-tumor) cohort
+- procedure
+  - i) find germline eQTL variants
+  - ii) Quantified enriched overlap with epigenetic regions
+  - iii) Compare enrichment with GTEx (non-tumor samples)
+:::
+
+## Expression variance factors
+
+![](./img/pcawg_rna-1b.png){fig-align="center"}
+
+:::notes
+- Takeaway: somatic copy number variants had largest effect on expression, surprisingly exon variants explained low expression variance
+:::
+
+## Bivalent promoter lead eQTL
+
+:::{.center}
+- TEKT5: testicular cancer associated
+- Bivalent: marked with both active & repressive chromatin marks
+:::
+
+![](./img/pcawg_rna-1c.png){fig-align="center"}
+
+:::notes
+- TEKT5: sperm mobility and integrity. relevant for testicular cancers
+- Takeaway: eQTLs were at a bivalent promoter.
+- Bivalent promoter: sensitive to either up/down-regulation
+- Takeaway: TEKT5 is usually subject to up/down-regulation
+:::
+
+## Allelic expression imbalance
+
+![](./img/allelic-expression-imbalance.png){fig-align="center"}
+
+:::notes
+- AEI: uneven expression of 2 different gene alleles
+- Here, CA haplotype has drives larger expression than TG haplotype
+:::
+
+## Allelic expression imbalance
+
+![](./img/pcawg_rna-1e.png){fig-align="center"}
+
+:::notes
+- Takeaway: somatic PTV SNPs ("stop-gained") variable had largest change in odds under a logistic regression model
+:::
+
+## Alternative splicing variants
+
+![](./img/pcawg_rna-2a.png){fig-align="center"}
+
+:::notes
+- Takeaway: Variants near exon-intron boundaries are most likely to cause alternative splicing
+- Dark blue: # of events associated with exon skipping
+:::
+
+## Alternative splicing variants
+
+
+![](./img/pcawg_rna-2b.png){fig-align="center"}
+
+:::notes
+- Takeaway: Example somatic variant creating novel transcripts via exonization of intron
+- Red: tumor. Gray: non-tumor
+:::
+
+## Alternative splicing variants
+
+![](./img/pcawg_rna-2c.png){fig-align="center"}
+
+:::notes
+- Takeaway: Reverse strand Alu elements commonly involved in splicing alternative variant events. Specifically, reverse strand transductions.
+:::
+
+## Gene fusions
+
+![](./img/pcawg_rna-3a.png){fig-align="center"}
+
+:::notes
+- Takeaway: majority of fusion calls were novel, small subset were recurrent (>1 individual)
+:::
+
+## Dual-translocation fusion
+
+![](./img/pcawg_rna-3b.png){fig-align="center"}
+
+:::notes
+- Takeaway: fusions can occur on a chromosome non-native to either constituent gene
+- Here: ETV is from CHR12 & NTRK is from CHR15, yet they are both translocated to CHR6 resulting in a fusion.
+- Empirically, about 1/5 of fusions with SV evidence were of this type called "bridge fusions"
+:::
+
+## DNA & RNA alterations by tumor
+
+![](./img/pcawg_rna-4a.png)
+
+:::notes
+- Heiarchical clustering using alteration type counts per tumor
+- Takeaway i): alternative splicing variation across tumor types is extreme. Is this due to detection sensitivity or biology?
+- Takeaway ii): the heterogenity across tumor types for alteration counts is high. Tumor-wise analyses may be necessary
+:::
+
+## Driver gene DNA & RNA alterations
+
+![](./img/pcawg_rna-4d.png)
+
+:::notes
+- Driver gene is union of PCAWG and COSMIC driver genes
+- Takeaway i): RNA driver gene alterations are more common (green) than DNA driver gene alterations
+- Takeaway ii): Some driver genes are biased more toward DNA alterations or vice versa. Ex: TP53 tends to be driven by DNA alterations
+:::
+
+## PCAWG RNA summary
+
+:::{.center}
+:::{.small}
+1. SCNA variants explained a large amount of expression change
+2. Splice altering variants cluster at exon-intron boundaries
+3. "Bridge" fusions are relatively common
+4. Driver gene bias toward DNA/RNA alterations
+:::
+:::
+
+::::{.columns}
+:::{.column width="33%"}
+![](./img/pcawg_rna-1b.png)
+:::
+:::{.column width="33%"}
+
+<br>
+
+![](./img/pcawg_rna-2a.png)
+:::
+:::{.column width="33%"}
+
+<br>
+
+![](./img/pcawg_rna-4d.png)
+:::
+::::
+
+## Fusion benchmarking
+
+:::{.center}
+Sections
+
+1. Fusion calling strategy and evaluation
+2. Simulation eval.
+3. Cancer cell line eval.
+:::
+
+## Fusion calling strategy
+
+:::{.center}
+- 18 alignment-based methods
+- 5 assembly-based methods
+:::
+
+![](./img/fusion_bench-1a.png){fig-align="center"}
+
+:::notes
+- Takeaway: 2 core strategies: i) raw read alignemnt (short contigs) and ii) Transcript assembly then alignment
+- Takeaway 2: the units of fusion evidence are i) discordant/spanning reads and ii) split/junction reads
+- Discordant reads are specific to paired-end technology: each mate maps fully to another gene
+- Split reads are evidence in single or paired-end read techs: the read partially maps to both genes
+:::
+
+## Fusion calling evaluation
+
+![](./img/fusion_bench-1b.png){fig-align="center"}
+
+:::notes
+- Takeaway: Use classification metrics to compare tools and select parameters (e.g., min. supporting reads per call)
+- Problem: full truth set is typically unknown
+- Precision = TP/ \hat{P}
+- Recall = TP / P
+- F1 combines recall and precision
+:::
+
+## Simulated evaluation
+
+
+![](./img/fusion_bench-2ab.png){fig-align="center"}
+
+:::notes
+- Takeaway a): read methods outperform the assembly methods (Trinity and Jaffa-assembly)
+- Takeaway a): Most methods performed better with longer read lengths, except SOAPFuse and Fusionhunter (older tools probably tuned to older seq. tech with smaller read lens)
+- Takeaway a): best performers were Arriba, pizzly, STAR-Fusion (highest auPRC)
+- Takeaway b): Higher fusion expression led to higher recall
+:::
+
+## Cell line evaluation
+
+:::{.center}
+- Experimentally validated fusions from 4/60 cell lines
+:::
+
+![](./img/fusion_bench-3ab.png){fig-align="center" width="60%"}
+
+:::notes
+- Only showing fusions called by 3 or more methods here
+- Takeaway a) recall highest for tools that performed best in simulated eval
+- Only 1 exp. val. fusion found by single method (FusionCatcher)
+- b) left VA is recall of validated fusions, bars
+- b) right VA is precision of ensemble calls (intersection), blue line
+- Takeaway b):  Precision asymptotes at about 10 caller agreement
+- Takeaway b): recall falls off at about 11 caller agreement
+:::
+
+## Cell line evaluation
+
+:::{.center}
+- 56 cell lines
+- "Wisdom of crowds" defines TP & FP
+:::
+
+![](./img/fusion_bench-4a.png){fig-align="center"}
+
+:::notes
+- Let caller agreement threshold vary from 1,...,23 and compute TP and FP for each case -> perf. dist.
+- Takeaway i): again STAR-Fusion and Arriba perform the best (raw read aligners) while assembly methods perform worst (Trinity)
+- Takeaway ii): Top and bottom rankings hardly vary as caller agreement threshold changes, but middle rankings do change
+:::
+
+## Runtime
+
+![](./img/fusion_bench-4b.png){fig-align="center"}
+
+:::notes
+- Takeaway i): Pizzly, STAR, and Arriba are also fastest alongside having high classification perf.
+- However, STAR 'kickstart' is no longer supported/recommended
+:::
+
+## Cell line evaluation
+
+![](./img/fusion_bench-4d.png){fig-align="center"}
+
+:::notes
+- At caller agreement = 7 definition of TP and FP,
+- Takeaway: STAR-Fusion has both high precision and recall. Arriba is a close second
+- Takeaway 2: The assembly-based mehods have high precision, but low recall.
+:::
+
+## Fusion benchmark summary
+
+:::{.center}
+1. Raw read mapping methods outperform transcript assembly methods
+2. STAR-Fusion and Arriba are top-performers
+3. Similar results for simulated and cell line evaluation
+:::
+
+::::{.columns}
+:::{.column width="50%"}
+![](./img/fusion_bench-4d.png)
+:::
+:::{.column width="50%"}
+![](./img/fusion_bench-4b.png){width="55%"}
+:::
+::::
+
+## STAR-Fusion
+
+:::{.center}
+Sections
+
+1. Pipeline
+2. Benchmarking
+:::
+
+## STAR-Fusion pipeline
+
+![](./img/star_fusion-1.png){fig-align="center"}
+
+:::notes
+- Align reads
+- Count discordant & split reads involving genes
+- Apply various filters
+:::
+
+## STAR-Fusion filters
+
+
+:::{.center}
+:::{.small}
+- Split read min. alignment size (25bp each)
+- Ignore minority breakpoint contributers
+- Homology
+- "Promiscuous" genes (many fusion partners)
+:::
+:::
+
+![](./img/star_fusion-1.png){fig-align="center"}
+
+## Evaluation
+
+:::{.center}
+![](./img/star_fusion-2ab.png){fig-align="center" width="60%"}
+![](./img/star_fusion-3ab.png){fig-align="center" width="60%"}
+:::
+
+
+:::notes
+- Same simul. and cell line data was used for evaluation. Similar results
+:::
+
+# Visualization
+
+## Motivation
+
+## UCSC genome browser
+
+:::{.center}
+Sections
+
+1. Jointly view omics annotations
+2. Efficiently view different resolutions
+
+## Genome feature comparison
+
+![](./img/ucsc-1.png){fig-align="center"}
+
+:::notes
+- Browser is relatively old, but still useful to-date
+- Why useful?
+- i) Comparing multiple annotation types jointly using tracks is useful for hypothesis generation; historically, finding new human genes
+- ii) Annotations can be expensive to compute. A pre-computed set of annotations accessible from web saves significant time.
+:::
+
+## Efficient variable resolution
+
+![](./img/ucsc-7.png){fig-align="center"}
+
+:::notes
+- Hierarchical feature indexing enables fast lookup
+- Features are indexed to the smallest bin that contains them
+- Takeaway: Can efficiently lookup relevant subset of features in a region or that intersect another feature
+:::
+
+## UCSC genome browser summary
+
+:::{.center}
+1. Efficiently view genomic features as tracks
+2. Pre-computed annotations available from web
+3. Updates support various genomic file format tracks
+:::
+
+## Samplot
+
+:::{.center}
+Sections
+
+1. Samplot examples
+2. VCF support
+3. Image-driven SV filtering
+:::
+
+## DEL
+
+:::notes
+- Takeaway: samplot can enables rapid verification of SV events
+- Uses tracks to view multiple forms of SV evidence
+- Track 1: short-read seq alignments
+- Alignment tracks directly show SV evidence at high resolution
+  - Connected squares are discordant paired-end reads
+  - Dashed lines are split reads
+  - Grey background distribution is coverage (reads aligned per base)
+- Track 2: PacBio long-read seq alignments
+- Track 3: Repeat annotation
+- Track 4: Gene annotation with exons
+:::
+
+## DUP and INV
 
 
 
