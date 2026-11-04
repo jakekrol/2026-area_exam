@@ -28,7 +28,7 @@ format:
 :::notes
 - SVs are important because they contribute a large amount of total bp variation per genome
 - Estimates vary, but genome.gov estimates >20Mbp of variation on avg.
-- However, # SV events small (~2.5k) compared to SNPs and INDELs
+- However, # SV events small (~25k) compared to SNPs and INDELs
 :::
 
 ## Disease driving SVs
@@ -135,7 +135,7 @@ format:
 ::::
 
 ::: notes
-SV mechanisms vary by where and when they occur
+- SV mechanisms vary by where and when they occur
 - Where: repeats, damaged DNA, or replication forks
 - When: synthesis, recombination, or repair
 :::
@@ -153,8 +153,8 @@ SV mechanisms vary by where and when they occur
 
 :::
 
-:::notes
-For each section, I want to pose potential research gaps to consider throughout and revisit this at the end
+- :::notes
+- For each section, I want to pose potential research gaps to consider throughout and revisit this at the end
 - In summary, there's a few gaps related to SV mechs.
 - Calling dependent SVs, as we will see many SVs are not independent, yet SV callers typically do not leverage this. Usually analysis is done post-hoc.
 - Second, leveraging mechanistic models during the call process is under-investigated and may improve the quality of callsets. Most methods use seq. data only
@@ -270,8 +270,7 @@ NAHR SV near RAI1 and nearby genes on CHR 17
 <br>
 
 
-- Risk $\propto$ length & sequence identity
-- Risk $\frac{1}{\propto}$ distance between elements
+- Risk $\propto$ length, sequence identity, closeness
 
 :::
 :::
@@ -795,7 +794,7 @@ pLoF mutation rates are constrained to be rare
 ![](./img/gnomad-f2cd.png){fig-align="center" width="50%"}
 
 :::notes
-- They estimated the number of LoF variants at different sample subset sizes
+- They computed the number of LoF variants at different sample subset sizes
 - Found that LoFs were much less common than expected by random chance
 - Both in terms of total count and percent of genes with > 10 LoF SNVs
 :::
@@ -899,7 +898,7 @@ Constrained RNA isoforms are highly expressed
 :::notes
 - Okay, so how do you apply mutation metrics to study disease?
 - Well, they asked 
-- Are diseases/traits are enriched with constrained pLoF variants?
+- Are diseases/traits enriched with constrained pLoF variants?
 - Is there a relationship of heritability and mutational constraint? 
 :::
 
@@ -959,6 +958,7 @@ Constrained RNA isoforms are highly expressed
 - When applied to an external cohort,
 - They found that traits like schizophrenia and educational attainment were sig. associated
 - Agreeing with previous findings
+:::
 
 
 ## gnomAD summary
@@ -2984,13 +2984,6 @@ Sections
 - Takeaway: samplot substantially outperforms SV2 and slightly outperforms duphold, particularly when SVs are at lower allele frequencies
 :::
 
-## Samplot summary
-
-:::{.center}
-1. High resolution SV evidence viewer
-2. Delineates various SV types
-3. Automated filtering of false DEL SVs
-:::
 
 ## IGV
 
