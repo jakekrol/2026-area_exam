@@ -6,57 +6,105 @@ format:
     css: theme.scss
 ---
 
-<!-- budget 80 slides -->
-<!-- sections: i) mechanisms, ii) population, iii) cancer, iv) fusion, v) visualization -->
-<!-- ~15 slides per section -->
-<!-- presentation should be < 1 hr -->
+## Structural variants (SVs)
 
+![](./img/sv-types.png){fig-align="center"}
 
-
-## Structural variant (SV)
-
-## What causes endogenous SVs?
-
-:::{.center}
-
-
-<br>
-
-**Homology**
-
-ATCGATCG **Seq. 1**
-<br>
-AACGAACG **Seq. 2**
-
-<br>
-
-**Repeats**
-
-TAAAAAAT **Seq. 1**
-<br>
-CAAAAAAT **Seq. 2**
-
-
+:::notes
+- Structural variants are primary variation I will discuss
+- They are large mutations deviating from expected human genome sequence
+- SVs types characterize how seq. varies from expected
+- DEL: loss of sequence
+- DUP: gain of existing seq.
+- INV: reversal of order
+- INS: gain of novel seq.
+- TRANS: sequence misplaced compared to expected
 :::
-
-::: notes
-"Repeats" -> "replication failures".
-"Homology" -> "recombination"
-:::
-
-
-
-
-
-
-## SV types
-
-![](./img/sv-types.png)
 
 ## Large base pair effect size of SVs
 
-Number of SVs per person seems underestimated
 ![](./img/sv-effect_size.png)
+
+:::notes
+- SVs are important because they contribute a large amount of total bp variation per genome
+- Estimates vary, but genome.gov estimates >20Mbp of variation on avg.
+- However, # SV events small (~2.5k) compared to SNPs and INDELs
+:::
+
+## Disease driving SVs
+
+:::{.center}
+:::{.small}
+
+| Mechanism | When | Recurrency | Breakpoint homology | Ex. pathology |
+| ----- | ----- | ----- | ----- | ----- | 
+| NAHR | Recombination | Relatively high | Large | Smith–Magenis syndrome; DEL CHR 17, RAI1 |
+| NHEJ  | Repair | Low | None or small | Leukemia; FUSION, BCR-ABL |
+| BIR | Replication | Low | Small | Temple syndrome; DEL CHR 14 |
+| FoSTeS | Replication | Low | Small | Pelizaeus-Merzbacher; DUP CHR X, PLP1 | 
+
+:::
+:::
+
+:::notes
+- SVs often causes disease
+- Especially, neurological, developmental, and cancer diseases
+- Therefore, there's clinical incentive to understand SVs:
+  - What mechanisms cause them?
+  - When do SV mechanisms occur?
+  - Do they occur in multiple individuals (recurrency)?
+  - Are they pathological?
+:::
+
+## Computation necessity
+
+
+![](./img/icgc-file-sizes.png){fig-align="center"}
+
+<!-- ::::{.columns}
+:::{.column width="70%"}
+![](./img/icgc-file-sizes.png){fig-align="center"}
+:::
+:::{.column width="30%"}
+
+<br>
+
+:::
+:::: -->
+
+:::notes
+- Computational approaches are necessary to answer these questions
+- For example, a single tumor sample's binary format sequence alignment map can be over 100GB
+- Disease analysis requires large samples sizes of both control and condition
+- Therefore, sheer data size necessitates computational analysis
+:::
+
+## Sections
+
+:::{.center}
+:::{.small}
+1. SV mechanisms
+2. SVs in population
+3. SVs in cancer
+4. Gene fusions
+5. SV visualization
+:::
+:::
+
+![](./img/sv-somatic-fusion-sizes.png){fig-align="center" width="70%"}
+
+:::notes
+- First, I will summarize mechanisms
+- Second, look at population-scale SV analyses
+- Third, SVs in cancer
+- Fourth, investigate a special case of cancer SVs: gene fusions
+- Fifth, conclude with SV viz methods, useful to verify if SV really exists
+
+:::
+
+
+# SV mechanisms
+
 
 ## SV recipe
 
@@ -70,29 +118,27 @@ Number of SVs per person seems underestimated
 
 ::::{.columns}
 :::{.column width="50%"}
-![](./img/partial-homology.png){fig-align="center"}
+![](./img/partial-homology.png){fig-align="center" width="70%"}
 :::
 :::{.column width="50%"}
-![](./img/repeat.png){fig-align="center"}
+![](./img/repeat.png){fig-align="center" width="70%"}
 :::
 ::::
 
 ::::{.columns}
 :::{.column width="50%"}
-![](./img/dna-replication.png){fig-align="center"}
+![](./img/dna-replication.png){fig-align="center" width="70%"}
 :::
 :::{.column width="50%"}
-![](./img/recombination.jpg){fig-align="center"}
+![](./img/recombination.jpg){fig-align="center" width="70%"}
 :::
 ::::
 
 ::: notes
-maybe animate with 2 slides
+SV mechanisms vary by where and when they occur
+- Where: repeats, damaged DNA, or replication forks
+- When: synthesis, recombination, or repair
 :::
-
-# SV mechanisms
-
-
 
 
 ## SV mechanism research gaps
@@ -101,11 +147,19 @@ maybe animate with 2 slides
 
 :::{.center}
 
-- Calling *dependent* SVs
-- Calling SVs using sequencing and mechanism models jointly
-- Which mechanisms are most frequent?
-- Association of mechanisms and pathologies
+1. Calling dependent SVs
+2. Calling SVs using sequencing and mechanism models jointly
+3. Mechanism-pathology association
 
+:::
+
+:::notes
+For each section, I want to pose potential research gaps to consider throughout and revisit this at the end
+- In summary, there's a few gaps related to SV mechs.
+- Calling dependent SVs, as we will see many SVs are not independent, yet SV callers typically do not leverage this. Usually analysis is done post-hoc.
+- Second, leveraging mechanistic models during the call process is under-investigated and may improve the quality of callsets. Most methods use seq. data only
+- Third, the association of mechanisms and pathologies is under-investigated mostly due to limited availability of large disease sample sizes
+- So, consider if the papers I discuss support these putative gaps or not
 :::
 
 
@@ -113,9 +167,20 @@ maybe animate with 2 slides
 
 ![](./img/recombination.jpg){fig-align="center"}
 
+:::notes
+The first mechanism involves recombination process where DNA is exchanged between homologous chromosomes at the same location or allele.
+:::
+
 ## Non-allelic homologous recombination
 
 ![](./img/non-allelic-homologous-recombination.png){fig-align="center"}
+
+:::notes
+- However, 'non-allelic' homologous recombination is crossing over at two different sites causing SV
+- For ex, 2 homologous chromosomes might line up incorrectly due to repeat homology 
+- In the left example, the AB alleles of the 1st chromosome abnormally lines up with the CD alleles of the 2nd chromosome
+- This may cause a DEL in one chromosome and a DUP in the other
+:::
 
 ## Smith-Magenis syndrome
 
@@ -128,9 +193,14 @@ NAHR SV near RAI1 and nearby genes on CHR 17
 
 <br>
 
-![](./img/smith-magenis-syndrome.jpg){fig-align="center" width="30%"}
+![](./img/smith-magenis-syndrome.jpg){fig-align="center" width="20%"}
 
 :::
+:::
+
+:::notes
+- Smith-Magenis syndrome is hypothesized to be caused by NAHR nearby the RAI1 gene
+- Symptoms include physical and developmental abnormalities
 :::
 
 
@@ -152,6 +222,12 @@ NAHR SV near RAI1 and nearby genes on CHR 17
 :::
 :::
 
+:::notes
+- A canonical homologous element is the segmental duplication
+- These are large highly homologous (high seq. similarity) elements
+- The area around these elements is known to be a hotspot for NAHR
+:::
+
 
 
 
@@ -159,9 +235,20 @@ NAHR SV near RAI1 and nearby genes on CHR 17
 
 ![](./img/nahr-del-dup.png)
 
+
+:::notes
+- How exactly does this mechanism work?
+- Say we have 2 chromosomes with 2 large, homologous repeats on each
+:::
+
 ## NAHR DEL-DUP
 
 ![](./img/nahr-del-dup-recombination-window.png)
+
+:::notes
+- The recombination window might abnormally form like this
+- And after crossing over, the top chromosome will only receive 1 repeat copy, while the bottom chr receives an extra third repeat copy
+:::
 
 ## NAHR DEL-DUP
 
@@ -190,21 +277,9 @@ NAHR SV near RAI1 and nearby genes on CHR 17
 :::
 
 ::: notes
-
-citation? probably one of the SV mech papers
-
-:::
-
-## NAHR summary
-
-<br>
-
-:::{.center}
-
-- Recombination at homologous, but non-matching loci
-- Breakpoints have large homology
-- Example: Smith-Magenis syndrome
-- Relatively high reurrency
+- Beyond SDs, other genomic elements are known to cause SVs via NAHR: LINE and HERV
+- The SV risk of NAHR increases as the repeats are larger or more similar
+- The SV risk also increases the closer these elments are
 
 :::
 
@@ -212,6 +287,11 @@ citation? probably one of the SV mech papers
 ## Non-homologous end joining (NHEJ)
 
 ![](./img/nhej.webp){fig-align="center"}
+
+:::notes
+- Another mechanism is non-homolgous-end joining
+- When DNA broken, then imperfectly repaired
+:::
 
 ## Chronic myeloid leukemia fusion
 
@@ -224,11 +304,27 @@ citation? probably one of the SV mech papers
 :::
 :::
 
+:::notes
+- For example, in chronic myeloid leukemia, the tumor driving fusion BCR-ABL is hyp. to be from NHEJ
+- Although NHEJ is not typically recurrent, the hypothesis is that CHR9 and CHR22 gene regions are physically close, and suscetible to abnormal repair deriving a fusion event
+:::
+
+
 ![](./img/bcr-abl.jpg){fig-align="center"}
 
 ## NHEJ example
 
 ![](./img/dup-trp.inv-dup.png){fig-align="center"}
+
+:::notes
+- A common complex SV formed by NHEJ is a DUP, TRP, DUP event when a replication fork collapses unexpectedly during DNA synthesis
+- 1) one replication fork collapses
+- 2) the loose end invades another replication fork 
+- 3) synthesis begins again
+- 4) The second replication collapses and a dsDNA break occurs
+- finally, synthesized strand invades the break producing a large copy number gain
+
+:::
 
 ## NHEJ summary
 
@@ -254,32 +350,14 @@ citation? probably one of the SV mech papers
 <!-- from Mechanisms underlying structural
 variant formation in genomic disorders -->
 
-## Temple syndrome
-
-:::{.center}
-
-<br>
-
-- BIR SV: CHR 14 DUP-TRP/INV-DUP
-- Symptoms
-  - Intellectual disabilities
-  - Early onset puberty
-
+:::notes
+- Replication fork collapses
+- Abnormal loose end of synth. strand
+- Template switch over to previous repeat copy
+- Result is a duplication
 :::
 
-## BIR summary
 
-- Replication template switching due to microhomology
-- Breakpoints show microhomology
-- Example: Temple syndrome; CHR 14 DUP-TRP/INV-DUP
-- Low recurrency
-
-<!-- ## Template switch DEL and DUP
-
-
-<br>
-
-![](./img/template-switch-DEL-and-DUP.png){fig-align="center"} -->
 
 ## Fork stalling and template switching (FoSTeS)
 
@@ -293,32 +371,17 @@ Template switching during replication
 
 :::
 
-## Pelizaeus-Merzbacher disease
-
-<br>
-
-:::{.center}
-
-- Mechanism: CHR X DUP; PLP1 gene
-- Symptoms:
-  - Involuntary movements
-  - Developmental delays
+:::notes
+- Replication
+- Stalling (e.g., secondary structure)
+- Lagging strand frees
+- Invades another replication fork
 :::
 
-## FoSTeS summary
-
-:::{.center}
-
-<br>
-
-- Template switching from one replication fork to another
-- Breakpoints have microhomology
-- Example: Pelizaeus-Merzbacher disease
-- Low recurrency
-
-:::
 
 ## SV mechanisms
+
+<br>
 
 :::{.small}
 :::{.center}
@@ -335,13 +398,15 @@ Template switching during replication
 :::
 
 ::: notes
-
-- NAHR pathology: Mechanisms underlying structural variant formation in genomic disorde
-- BIR pathology: https://www.nature.com/articles/s41594-025-01644-z#Sec5 table1
-- NHEJ pathology: Distinct pattern of genomic breakpoints in CML and BCR::ABL1-positive ALL: analysis of 971 patients
-- FoSTeS pathology: https://pmc.ncbi.nlm.nih.gov/articles/PMC2685756/
+- In summary, NAHR characterized by recurrent events and large breakpoint homology
+- Other mechs have low recurrency, homology, and occur during repair or replication
 
 :::
+
+<!-- - NAHR pathology: Mechanisms underlying structural variant formation in genomic disorde
+- BIR pathology: https://www.nature.com/articles/s41594-025-01644-z#Sec5 table1
+- NHEJ pathology: Distinct pattern of genomic breakpoints in CML and BCR::ABL1-positive ALL: analysis of 971 patients
+- FoSTeS pathology: https://pmc.ncbi.nlm.nih.gov/articles/PMC2685756/ -->
 
 
 ## SV mechanism research gaps
@@ -350,11 +415,19 @@ Template switching during replication
 
 :::{.center}
 
-- Calling *dependent* SVs
-- Calling SVs using sequencing and mechanism models jointly
-- Which mechanisms are most frequent?
-- Association of mechanisms and pathologies
+1. Calling dependent SVs
+2. Calling SVs using sequencing and mechanism models jointly
+3. Mechanism-pathology association
 
+:::
+
+:::notes
+- Revisting research gaps,
+- SVs are not indepdendent
+- Often treated independent during calling
+- Post-hoc analysis resolves dependence
+- Second, calling SVs based on mech models (e.g., breakpoint homology) may increase precision
+- Third, quantifying association of mech. and path. would help us understand disease causes
 :::
 
 ## Dependent SVs and mechanisms
@@ -368,8 +441,14 @@ Template switching during replication
 :::
 
 
-![](./img/nhej.webp){fig-align="center" width="75%"}
+![](./img/nhej.webp){fig-align="center" width="55%"}
 
+:::
+
+:::notes
+- As we saw, a single NHEJ event may produce multiple SVs
+- NAHR has characteristic homology and SV types
+- Although, it would be challenging to resolve NHEJ, BIR, and FoSTeS solely on breakpoints since they all have low homology
 :::
 
 ## Dependent SVs as "Complex SVs"
@@ -388,7 +467,10 @@ Severus
 
 ![](./img/severus-workflow.png){fig-align="center" width="50%"}
 
-
+:::notes
+- An existing tool for resolving dependent SVs is severus,
+- However, it only uses breakpoint position not sequence
+:::
 
 
 ## Severus complex SVs
@@ -399,15 +481,20 @@ Annotates a pre-defined set of complex SVs
 
 ![](./img/severus-complex-svs.png){fig-align="center"}
 
+:::notes
+- Severus is also limited to a pre-defined set of complex SVs
+:::
+
 ## Many coordinates clusterers
 
-<br>
 
 :::{.center}
+:::{.small}
+
 
 Breakpoint sequence not leveraged
+:::
 
-<br>
 
 
 ::::{.columns}
@@ -420,6 +507,10 @@ Breakpoint sequence not leveraged
 :::
 ::::
 
+:::
+
+:::notes
+In general, current complex/dependent SV finders use breakpoint positions solely, not brekapoint seq or mechanistic models.
 :::
 
 # SVs in human population
@@ -439,14 +530,23 @@ Breakpoint sequence not leveraged
 
 ::::{.columns}
 :::{.column width="50%"}
-![](./img/gnomad.jpg){width="50%"}
+![](./img/gnomad.jpg){width="40%"}
 :::
 :::{.column width="50%"}
-![](./img/1000genomes.jpg){width="50%"}
+![](./img/1000genomes.jpg){width="40%"}
 :::
 ::::
 
 :::
+:::
+
+:::notes
+- 3 major studies
+- gnomAD largest, focus on SNVs and genes constrained to variation
+- 1KG
+- 2 papers: i) short-read more samples and ii) long-read less samples
+- paper 1 was about SV set construction and description
+- paper 2 was about analysis using both linear and graph genomes
 :::
 
 ## Population SV findings
@@ -474,6 +574,28 @@ Breakpoint sequence not leveraged
 :::
 :::
 
+:::notes
+- the major findings, imo, are
+- gnomad: some genes essential, others dispensible
+- 1kg sr: describe SV set from multiple ancestries
+- 1kg lr: mobile element SVs impact human genomely largely
+:::
+
+## Research gaps
+
+:::{.center}
+1. Mobile element detection and inspection
+2. Low VAF specialized analysis
+:::
+
+
+:::notes
+- Research gaps relative to pop. SV analysis
+- Mobile elements cause a significant amount of SVs, yet majority of callers focus on DELs and copy number variants
+- Experimental wesults were often sensitive to low VAF.
+- Correcting for and addressing low VAF SVs is important since rare SVs are more likley to be pathogenic than common SVs
+:::
+
 ## gnomAD
 
 :::{.center}
@@ -482,8 +604,8 @@ Breakpoint sequence not leveraged
 Sections
 
 1. Dataset description
-2. Negative selection for pLoF variants
-3. pLoF-disease association
+2. Negative selection for LoF variants
+3. LoF-disease association
 :::
 :::
 
@@ -500,17 +622,9 @@ Sections
 ::::
 
 :::notes
-
-Sections
- 
-1. Sample geographic description (F1ab)
-2. Overlap of variants (F1e-h)
-3. LOFTEE annotation filter intuits with freq. and MAPS (F2ab)
-4. LoF SNVs are empirically constrained (F2cd)
-5. LOEUF scores agree with gene annotations (F3)
-6. Constraint is larger for genes expressed in many tissues and that interact w/ many proteins
-7. LOEUF relation to disease
-
+- Begin dataset description
+- Show negative selection for protein loss of func. variants
+- Show association of pLoFs and disease
 :::
 
 ## Sample geography
@@ -521,9 +635,15 @@ Sections
 - 125,748 exomes & 15,708 genomes
 - EUR biased
 
-![](./img/gnomad-f1ab.png){fig-align="center" width="30%"}
+![](./img/gnomad-f1ab.png){fig-align="center" width="20%"}
 
 :::
+:::
+
+:::notes
+- Most samples were exome seq.d 
+- About 10% were whole genome seq.d
+- The cohort was biased to EUR ancestry
 :::
 
 ## Genome v exome
@@ -532,34 +652,23 @@ Sections
 
 ![](./img/genome-v-exome.png){fig-align="center"}
 
+:::notes
+- Quick note
+- WGS covers all base pairs
+- Exome typically covers only exons
+- However, their exon samples also seemed to include introns, as we will see
+:::
+
 ## SNVs
-
-:::{.center}
-:::{.small}
-
-- SNVs: SNPs relative to reference genome
-- SNV analysis is conceptually transferrable to SVs
 
 ![](./img/snp.png){fig-align="center"}
 
+:::notes
+- Another quick note:
+- gnomad focuses on snvs moreso than SVs
+- these are just single base substitutions
 :::
-:::
 
-## Complexity of 1bp context SNVs
-
-:::{.center}
-
-<br>
-
-- gnomAD considers SNVs with 1bp context
-  - A**C**G -> A**A**G OR A**T**G OR A**G**G
-- $4^3=64$ possible 3-mers
-- 3 possible SNVs per 3-mer
-- Total 3-mer SNVs is $64\cdot 3=192$
-
-
-
-:::
 
 ## SNV-element overlap
 
@@ -574,7 +683,8 @@ Sections
 ::::
 
 ::: notes
-- Takeaways: i) splice site and nonsense mutations are relatively rare (gh) because ii) they are most likely to cause loss of function (cd).
+- They show i) splice site and nonsense mutations are relatively rare (gh) 
+- because ii) they are most likely to cause loss of function (cd).
 :::
 
 ## SNV-element overlap
@@ -598,7 +708,12 @@ Sections
 ::::
 
 ::: notes
-- Takeaways: i) splice site and nonsense mutations are relatively rare (gh) because ii) they are most likely to cause loss of function (cd).
+- This was quantified using MAPS: mutability adjusted proportion
+- Some other acronyms and terms:
+- Missense: SNV changes codon and protein seq.
+- pLoF: predicted loss of function
+- CpG: special type of SNP
+- Transversion is when purine base changes to pyrimidine or vice versa
 :::
 
 ## MAPS intution
@@ -607,8 +722,12 @@ Sections
 Is SNV functional class enriched with rare (singleton) events?
 :::
 
-
 ![](./img/gnomad-f1cdefgh.png){fig-align="center" width="90%"}
+
+:::notes
+- goal of MAPS metric is to test if an SNV func. class enriched with singleton events
+- If a class is more rare than expected, then it is constrained
+:::
 
 ## MAPS
 
@@ -621,21 +740,30 @@ Is SNV functional class enriched with rare (singleton) events?
 - MAPS > 0: more singletons observed than expected
 <!-- - Expected: derived from non-coding regions, weighted by mutation rate (freq.) -->
 
-![](./img/maps.png){fig-align="center" width="30%"}
+![](./img/maps.png){fig-align="center" width="20%"}
 
 :::
+:::
+
+:::notes
+- MAPS: Mutability adjusted proportion of singletons
+- Aggregate singletons within SNV functional classes (e.g., pLoF or missense)
+- MAPS > 0: more singletons observed than expected
+- Expected is estimated from non-coding regions and weighted by SNP mutation rates
 :::
 
 ## pLoF negative selection
 
 :::{.center}
 
-<br>
-
 pLoF mutation rates are constrained to be rare 
 
-![](./img/gnomad-f1cdefgh.png){fig-align="center" width="40%"}
+![](./img/gnomad-f1cdefgh.png){fig-align="center" width="30%"}
 
+:::
+
+:::notes
+- So, in summary the high MAPS value showed that LoF variants are constrained to be rare
 :::
 
 ## LoF annotation-based filtering
@@ -644,8 +772,10 @@ pLoF mutation rates are constrained to be rare
 
 ::: notes
 
-- Example annotation filters: UTR splice site
-- LOFTEE filtering agrees with ClinVar annotations and AF
+- They developed an annotation-based filter for loss of function variants,called LOFTEE
+- Example annotation filters: UTR splice site would not affect the protein seq.
+- In summary, LOFTEE filtering agrees with ClinVar annotations and observed AF
+- That is, higher AF were more likely to be filtered out as non LoF variants
 
 :::
 
@@ -653,28 +783,30 @@ pLoF mutation rates are constrained to be rare
 
 ![](./img/rna-splicing.png){fig-align="center"}
 
-## LOFTEE
-
-:::{.center}
-
-LOFTEE filter rate intuits with ClinVar annots., AF, and MAPS
-
-![](./img/gnomad-f2ab.png){fig-align="center" width="40%"}
-
+:::notes
+- Another side note
+- UTRs & introns are gene regions that are spliced out and not in final protein
 :::
+
 
 ## pLoF SNVs emprically under-observed
 
 
 ![](./img/gnomad-f2cd.png){fig-align="center" width="50%"}
 
+:::notes
+- They estimated the number of LoF variants at different sample subset sizes
+- Found that LoFs were much less common than expected by random chance
+- Both in terms of total count and percent of genes with > 10 LoF SNVs
+:::
+
 ## pLoF functional consequences
 
 ![](./img/gnomad-f3abcd.png){fig-align="center" width="50%"}
 
 :::notes
-
-- Takeaways: Low LOEUF associated with essential genes
+- Using their cohort, they developed statistical metric to rank genes constrained to LoF variants
+- When applied, the metric isolated essential genes and non-essential genes (like olfactory genes)
 :::
 
 ## LOEUF
@@ -692,18 +824,18 @@ LOFTEE filter rate intuits with ClinVar annots., AF, and MAPS
 :::
 :::
 
-## pLoF functional consequences
-
-![](./img/gnomad-f3abcd.png){fig-align="center" width="50%"}
-
 :::notes
-
-- Takeaways: Low LOEUF associated with essential genes
+- LOEUF metric is "Loss-of-function observed expected upper bound fraction"
+- Goal: mesaure intolerance to pLoF
+- approach: score genes by pLoF SNV proportion
+- value: #Obs. pLoF SNVs / #Exp. pLoF SNVs; take upper bound CI
+- A lower value implies a gene constrained to not have LoF variants
+- The confidence interval allows better resolution for small and large genes, such as the example in text
 :::
+
 
 ## Constrained genes PPI and expression
 
-<br>
 
 ::::{.columns}
 :::{.column width="50%"}
@@ -723,9 +855,13 @@ $\downarrow$ LOEUF $\rightarrow$ $\uparrow$ tissue expression coverage
 
 :::
 :::{.column width="50%"}
-![](./img/gnomad-4ab.png){fig-align="center" width="75%"}
+![](./img/gnomad-4ab.png){fig-align="center" width="55%"}
 :::
 ::::
+
+:::notes
+- Genes with high PPI or expression coverage across tissues were more constrained against LoF variants
+:::
 
 
 ## Transcript expression bias
@@ -747,6 +883,7 @@ Constrained RNA isoforms are highly expressed
 
 ::: notes
 - For each gene with >=1 constrained and >=1 unconstrained isoform, they measured expression fraction of constrained transcript
+- Constrained RNA isoforms had greater expresssion
 :::
 
 ## How apply mutational constraint metrics?
@@ -759,17 +896,29 @@ Constrained RNA isoforms are highly expressed
 - Relationship of heritability and mutational constraint?
 :::
 
+:::notes
+- Okay, so how do you apply mutation metrics to study disease?
+- Well, they asked 
+- Are diseases/traits are enriched with constrained pLoF variants?
+- Is there a relationship of heritability and mutational constraint? 
+:::
+
 ## De novo pLoF SNVs in disease
 
 :::{.center}
 :::{.small}
 
 - Rate ratio: #Disesase de novo SNVs / #Control de novo SNVs
-- More de novo pLoF SNVs in constrained genes occur in developmental/intellectual disability cases compared to control
 
-![](./img/GNOMAD-5a.png){fig-align="center" width="80%"}
+![](./img/GNOMAD-5a.png){fig-align="center" width="60%"}
 
 :::
+:::
+
+:::notes
+- Using a rate ratio: # Dis. de novo SNVs / # Control de novo SNVs
+- Found that,
+- More de novo LoF variants occured in constrained genes for developmental/intellectual disability cases compared to control
 :::
 
 ## Trait inheritance LOEUF association
@@ -779,9 +928,16 @@ Constrained RNA isoforms are highly expressed
 - Partitioning heritability enrichment
   - \> 1 $\rightarrow$ trait heritability explained by SNVs greater than random chance
 
-![](./img/gnomad-5b.png){fig-align="center"}
+![](./img/gnomad-5b.png){fig-align="center" width="70%"}
 
 :::
+:::
+
+:::notes
+- For trait heritability,
+- They compared LOEUF to partitioning heritability enrichment
+- heritability enrichment >1 implies trait heritability explained by SNVs is greater than random chance
+- Again, the heritability metric is larger for low LOEUF genes
 :::
 
 
@@ -796,6 +952,13 @@ Constrained RNA isoforms are highly expressed
 :::
 
 ![](./img/gnomad-5c.png)
+
+:::notes
+- Finally, they tested for trait enrichment of pLoF variants
+- Roughly, the null hyp. is that a trait is not associate with LoF variants
+- When applied to an external cohort,
+- They found that traits like schizophrenia and educational attainment were sig. associated
+- Agreeing with previous findings
 
 
 ## gnomAD summary
@@ -820,6 +983,12 @@ Constrained RNA isoforms are highly expressed
 :::
 ::::
 
+:::notes
+1. Massive exome dataset, yet biased to EUR ancestry
+2. Modeled mutational constraint gene-wise by pLoF proportion metric (LOEUF) 
+3. LOEUF metric aligned with fundamental biology and disease understanding
+:::
+
 ## 1KG sections
 
 :::{.center}
@@ -832,17 +1001,11 @@ Sections
 :::
 
 ::: notes
-1. SV summary (F1ab)
-2. Breakpoint accuracy (F1c)
-3. SVs shared across continental ancestry (F1d)
-4. SV-SNP linkage disequilibrium (F1e)
-5. SV overlap with elements (F2ab)
-6. SV expression association, eQTL (F2cd)
-7. SVs are in LD with lead eQTL SNP (F2e)
-8. SV hotspots (F3a)
-9. Complex DELs (F3b)
-10. Breakpoint analysis of complex SVs (F3cd)
-11. Complex INVs (F3e)
+- Next the short-read thousg paper
+- First, introduce SV callset
+- Second, quantify SV element overlap
+- Third, measure SV association with GWAS SNPs and expression
+- Fourth, investigate complex SVs and their breakpoints
 
 :::
 
@@ -852,9 +1015,10 @@ Sections
 ![](./img/1kg_sv_sr-1ab.png){fig-align="center"}
 
 ::: notes
-- Most SVs were not in DGV DB
-- INVs were rare relative to copy number variants
-- Length of SVs discovered was constrained by tool(-parameters)
+- The main findings include
+- i) most SVs were not in a large prior callset
+- ii) INVs rare relative to copy number variants
+- iii) Length of SVs discovered was constrained by tool(-parameters)
 :::
 
 ## SV callers
@@ -888,6 +1052,12 @@ Sections
 :::
 :::
 
+:::notes
+- Breakpoint accuracy was evaluated using assembled contigs and long-reads
+- They found low VAF SV breakpoints were less accurate
+- Pindel tool had high accuracy; it uses split read evidence only which always includes the junction sequence
+:::
+
 ![](./img/1kg_sv_sr-1c.png){fig-align="center" width="70%"}
 
 ## Discordant v split reads
@@ -902,6 +1072,12 @@ Split reads include breakpoint sequence
 
 ![](./img/discordant-v-split-read.jpg){fig-align="center"}
 
+:::notes
+- A side note on discordant v split reads
+- Split reads include the breakpoint sequence
+- Discordant reads do not necessarily
+:::
+
 ## SV ancestry
 
 
@@ -909,6 +1085,7 @@ Split reads include breakpoint sequence
 
 
 ::: notes
+- For ancestry,
 - Many SVs are present in > 1 continental ancestry
 - Some relatively common SVs (e.g., AC > 10 ) are present solely in AFR population; this population-distinctness is not observed for other pops.
 :::
@@ -927,12 +1104,26 @@ Split reads include breakpoint sequence
 :::
 ![](./img/1kg_sv_sr-1e.png){fig-align="center" width="70%"}
 
+:::notes
+- Using the linkage disequilibrium metric, they measured co-occurence stats for SVs and nearby SNPs
+- If r sq. is high this implies correlation or non-random co-occurence
+- Low implies co-occurence seems random
+:::
+
 ## SV element overlap
 
 - Expected: shuffled SVs intersecting with true elements
 - Approaches: i) partial overlap and ii) engulf overlap
 
 ![](./img/1kg_sv_sr-2ab.png){fig-align="center"}
+
+:::notes
+- Next, they analyzed the overlap of SVs and genomic elements
+- The expected overlap was computed by shuffling SVs while keeping other elements in-place
+- Their supp. methods described two ways to count overlap
+- i) partial overlap or
+- ii) engulf overlap
+:::
 
 ## Partial v enguled overlap
 
@@ -941,6 +1132,12 @@ Split reads include breakpoint sequence
 <br>
 
 ![](./img/partial-v-engulfed-overlap.png){fig-align="center"}
+
+:::notes
+- Partial overlap requires only 1 bp overlap
+- Engulf overlap requires the entire element to be contained in the SV
+- For the following results, partial overlap is reported
+:::
 
 ## SV partial element overlap
 
@@ -951,9 +1148,12 @@ Split reads include breakpoint sequence
 ![](./img/1kg_sv_sr-2ab.png){fig-align="center"}
 
 :::notes
-- left: important elements less constrained for DELs 
-- left: higher VAF -> lower chance of element overlap
+- The log obs./exp. was computed for various elements
+- Another important stat is RVIS: measuring functional variant intolerance
+- In summary,
+- and left fig.: lower VAF -> higher chance of element overlap
 - right: DELs are usually more constrained than other SV types
+- in general, constrained regions were negatively enriched with SV overlap
 :::
 
 ## SV expression association
@@ -961,13 +1161,20 @@ Split reads include breakpoint sequence
 :::{.center}
 :::{.small}
 
-- DUSP22: sig. eQTL variants overlaps coding seq.
+- DUSP22: sig. eQTL variants overlaps TSS and coding seq.
 - ZNF43: sig. eQTL variants are upstream coding seq.
 
 :::
 :::
 
 ![](./img/1kg_sv_sr-2cd.png){fig-align="center"}
+
+:::notes
+- For SV-expression association, eQTL was used
+- They noticed it was possible for lead eQTL variants to be either
+- i) at TSS or (top)
+- ii) some small distance away from TSS (bottom)
+:::
 
 ## SV expression association
 
@@ -983,6 +1190,10 @@ Split reads include breakpoint sequence
 
 ![](./img/1kg_sv_sr-2cd.png){fig-align="center"}
 
+:::notes
+- Briefly, eQTL null is essentially that there is no assication of an SV and gene expression
+:::
+
 ## LD of lead eQTL SNPs and SVs
 
 :::{.small}
@@ -997,9 +1208,10 @@ Split reads include breakpoint sequence
 :::
 
 :::notes
-- When haplotype length is constrained, # SVs in LD with lead eQTL SNP greater than expected
-- The association of lead eQTL SNPs and SV is more likely the large the SV
-- Yes, it's possible that traits associated lead eQTL SNPs may actually explained by SVs
+- They tested for enrichment of SVs in LD with lead eQTL
+- Found that constraining the haplotype length (r sq.) lead to larger enrichment
+- They also observed larger enrichment in larger SVs
+- In summary, it's possible that traits associated lead eQTL SNPs may actually explained by SVs
 :::
 
 ![](./img/1kg_sv_sr-2e.png){fig-align="center"}
@@ -1052,6 +1264,7 @@ Split reads include breakpoint sequence
 ![](./img/1kg_sv_sr-3c-labelled.png){fig-align="center"}
 
 ::: notes
+- They show some complex SV breakpoints, and we can tell
 - These are probably not NAHR because the homology is relatively small
 :::
 
@@ -1061,11 +1274,22 @@ Split reads include breakpoint sequence
 
 ![](./img/1kg_sv_sr-3d-labeled.png){fig-align="center"}
 
+:::notes
+- Left: DEL + INV
+- Next: Del + rep. DUPs + INS
+- Then: INV DUP
+- Finally, an INV + repeat noise
+:::
+
 ## DUPs are commonly INVerted
 
 <br>
 
 ![](./img/1kg_sv_sr-3e.png){fig-align="center"}
+
+:::notes
+- Interestingly, INV DUPs more common than simple DUPs
+:::
 
 ## 1KG SV SR summary
 
@@ -1093,32 +1317,31 @@ Split reads include breakpoint sequence
 :::
 ::::
 
+:::notes
+- In summary, 
+- ~1/2 SV callset novel; samples less biased to EUR than gnomAD
+- Negative selection for SVs overlapping conserved regions
+- SVs association with trait SNPs (LD) and gene expression (eQTL)
+- Complex SV classes recur some have characterisitc breakpoint signatures
+:::
+
 ## 1KG SV LR sections
 
 :::{.center}
 Sections
 
-1. Jointly analyzing linear and graph reference SVs
+1. Jointy analyzing SVs on linear and graph references
 2. SV callset characteristics
 3. Mobile elements
 4. Breakpoint analysis
 :::
 
 ::: notes
-1. Geographic distribution (F1a)
-2. Depth (F1b)
-3. SV analysis pipeline (F1c)
-4. SV allele freq. (F2a)
-5. SV lengths (F2b)
-6. Low AF SVs were missing from graph. (F2c)
-7. SV count by ancestry (F2de)
-8. SV element intersection (F2f)
-9. Within continental ancestry Fst (F2g)
-10. Example Svs biased to AFR & EAS demographics (F2h)
-11. Complex SVs (F3ab)
-12. Transduction activity (F4abcde)
-13. Breakpoint analysis (F5abcdef)
-14. Recurrent SV (F5g)
+- Now, the long-read paper emphaisized
+- joint analysis of SVs w.r.t linear and graph references
+- again, summarize SV characteristic
+- found mobile elements are highly active
+- conclude with breakpoint analysis 
 :::
 
 ## Geographical ancestry
@@ -1130,6 +1353,10 @@ Mixed sample geography avoids common EUR bias
 :::
 
 ![](./img/1kg_sv_lr-1a.png){fig-align="center"}
+
+:::notes
+- Again, the 1KG cohort is well-mixed avoiding the common EUR ancestry bias in genomics
+:::
 
 ## Long read (LR) depth and size
 
@@ -1144,11 +1371,13 @@ Mixed sample geography avoids common EUR bias
 :::
 :::
 
+:::notes
+- The read length here are about 2 orders of magnitude larger
+- SVs can now be contained in a single read
+:::
+
 ![](./img/1kg_sv_lr-1b.png){fig-align="center"}
 
-## Single v paired-end seq.
-
-![](./img/single-v-paired-end-seq.png){fig-align="center"}
 
 ## Augmented graph SV analysis
 
@@ -1165,7 +1394,9 @@ Mixed sample geography avoids common EUR bias
 ![](./img/1kg_sv_lr-1c.png){fig-align="center"}
 
 :::notes
-A graph reference uses forking paths to include more than 1 possible sequences
+- A major discussion of this paper is how they jointly analyzed SVs over linear and graph references
+- A graph reference uses forking paths to include more than 1 possible sequences
+- First, they aligned samples to the 3 diff refs
 :::
 
 ## Augmented graph SV analysis
@@ -1181,6 +1412,10 @@ A graph reference uses forking paths to include more than 1 possible sequences
 :::
 
 ![](./img/1kg_sv_lr-1c.png){fig-align="center"}
+
+:::notes
+- Next, they called SVs
+:::
 
 ## Augmented graph SV analysis
 
@@ -1203,6 +1438,15 @@ A graph reference uses forking paths to include more than 1 possible sequences
 
 <!-- ![](./img/1kg_sv_lr-1c.png){fig-align="center"} -->
 
+:::notes
+- They then created "pseudo-haplotypes" by 
+- Pooling SVs by caller
+- Assigned SVs to haplotypes such that no SVs overlap within haplotype
+- bcftools consensus was used here
+- I am curious what criteria beyond overlap was used to assign SVs to haplotypes since they are multiple possibilities if overlap alone was used
+- The table shows the count of pseudo haplotypes per SV caller
+:::
+
 ## Genotype v haplotype
 
 :::{.center}
@@ -1216,6 +1460,12 @@ A graph reference uses forking paths to include more than 1 possible sequences
 
 ![](./img/genotype-v-haplotype.webp){fig-align="center"}
 
+:::notes
+- A side note
+- Genotype tell us which alleles are present
+- A haplotype tells us which allele are physically linked together on a sinular CHR
+:::
+
 ## Augmented graph SV analysis
 
 :::{.center}
@@ -1225,6 +1475,10 @@ A graph reference uses forking paths to include more than 1 possible sequences
 <br>
 
 ![](./img/1kg_sv_lr-1c.png){fig-align="center"}
+
+:::notes
+- Okay, next they add pseudo-haplotypes to the graph
+:::
 
 ## Augmented graph SV analysis
 
@@ -1236,16 +1490,18 @@ A graph reference uses forking paths to include more than 1 possible sequences
 
 ![](./img/1kg_sv_lr-1c.png){fig-align="center"}
 
+:::notes
+- Finally, they genotype and phase SVs on the augmented graph
+:::
+
 ## SV allele frequency
 
 ![](./img/1kg_sv_lr-2a.png){fig-align="center"}
 
 :::notes
+- Similar to the short-read paper, they investigate AF by ancestry
 - About a 1/4 of SVs are singletons
 - About 1/2 are between AC>2 and AF < 50%
-- I do not think this plot demonstrates AFR contributes more SVs than other pops.
-  - Before AFR samples, about 80% of total SVs are already included
-- Maybe compare w/ SR here
 :::
 
 ## SV length
@@ -1253,15 +1509,21 @@ A graph reference uses forking paths to include more than 1 possible sequences
 ![](./img/1kg_sv_lr-2b.png){fig-align="center"}
 
 ::: notes
+- For SV length,
 - Many SVs are smaller than read length
-- SV count for illumina was subsetted to long read samples
+- Oh, the SV count for illumina was subsetted to long read samples
 - Mobile element driven SVs are characterized by length peaks
-- Maybe compare w/ SR here
 :::
 
 ## Graph augment adds low VAF SVs
 
 ![](./img/1kg_sv_lr-2c.png){fig-align="center"}
+
+:::notes
+- They also genotyped the graph before and after augmentation
+- Augmentation added mostly low VAF SVs which intuitively makes sense
+- If they were high VAF SVs, they would have likely already been represented in the graph
+:::
 
 ## SV count by continent and GT
 
@@ -1270,9 +1532,9 @@ A graph reference uses forking paths to include more than 1 possible sequences
 ![](./img/1kg_sv_lr-2de.png){fig-align="center"}
 
 :::notes
-- Counted num. hom/het SVs per individual
-- AFR highest SV count
-- 2nd place swaps from EAS to AMR for HOM > HET
+- By continent, they counted num. hom/het SVs per individual
+- AFR had highest SV count in both cases
+- 2nd place swaps from EAS to AMR for HOM to HET
 :::
 
 ## SV element overlap
@@ -1282,18 +1544,18 @@ A graph reference uses forking paths to include more than 1 possible sequences
 ![](./img/1kg_sv_lr-2f.png){fig-align="center"}
 
 :::notes
+- Again similar to SR paper,
 - most SVs not intersecting genes (intergenic)
-- SV that do intersect coding seqs. have low allele frequency
-- maybe compare with SR here
+- SV that did intersect coding seqs. had low allele frequency
 :::
 
-## Within continent SV mixing
+## Populaton mixing
 
 :::{.center}
 :::{.small}
 - $F_{st}$: fixation index
-  - $F_{st} \approx 0 \rightarrow$ SVs are well-mixed across continents
-  - $F_{st} \approx 1 \rightarrow$ SVs are biases to given continent
+  - $F_{st} \approx 0 \rightarrow$ SV AFs are consistent across continents
+  - $F_{st} \approx 1 \rightarrow$ SV AFs are biased to given continent
 :::
 :::
 
@@ -1308,16 +1570,9 @@ A graph reference uses forking paths to include more than 1 possible sequences
 ::::
 
 :::notes
-- AFR & EAS have relatively more SVs that are biased to their continent
-:::
-
-## SVs with continent bias
-
-![](./img/1kg_sv_lr-2h.png){fig-align="center"}
-
-:::notes
-- Top AFR biased DEL
-- Bottom EAS biased DUP
+- To measure mixing of continental ancestries,
+- They used the fixation index in a one-versus-rest and fashion and found that
+- AFR & EAS have relatively more SVs with AFs biased to their continent
 :::
 
 ## SV sub-classes
@@ -1335,10 +1590,9 @@ A graph reference uses forking paths to include more than 1 possible sequences
 :::
 
 ::: notes
+- Looking at SV classes resolved by SV annotator,
 - VNTR is most common SV class for both DEL and INS
-- DEL would remove some section of tandem repeats
-- INS would add tandem repeats
-- High MAF suggests these variants are not only common in magnitude, but shared across individuals
+- High MAF suggests these variants are common
 - Aside from VNTR, most other SV classes have low AF
 :::
 
@@ -1349,7 +1603,8 @@ A graph reference uses forking paths to include more than 1 possible sequences
 ![](./img/1kg_sv_lr-3b.png){fig-align="center"}
 
 :::notes
-- INV DUP more common than simple INV, tend to be smaller than other INV types
+- The INV sub-class analysis shows,
+- again, INV DUP more common than simple INV, tend to be smaller than other INV types
 - Overall, beyond mechanism and breakpoints, SV sub-classes have characteristic lengths and AF
 :::
 
@@ -1360,13 +1615,14 @@ A graph reference uses forking paths to include more than 1 possible sequences
 Transduction: element is copied and inserted elsewhere
 :::
 
-![](./img/1kg_sv_lr-3a-l1.png){fig-align="center" width="80%"}
-![](./img/1kg_sv_lr-4a.png){fig-align="center" width="60%"}
+![](./img/1kg_sv_lr-3a-l1.png){fig-align="center" width="60%"}
+![](./img/1kg_sv_lr-4a.png){fig-align="center" width="40%"}
 
 :::
 
 :::notes
-- L1: mobile element w/ characteristic ~6kbp length. includes a repeat region
+- Mobile element events were analyzed closely since they cause a large amount of variation
+- For ex, L1: mobile element w/ characteristic ~6kbp length. includes a repeat region
 - Takeaway: some mobile elements are more active than others and adjancent seq copied along is biased to the origin of element
 - Tail transduction bias except for 3rd origin loci
 - Not in GRCh38 nor CHM13 means it was in the graph genome
@@ -1376,16 +1632,20 @@ Transduction: element is copied and inserted elsewhere
 ## SVA transduction activity
 
 :::{.center}
-:::{.small}
 
-![](./img/1kg_sv_lr-3a-sva.png){fig-align="center" width="80%"}
-![](./img/1kg_sv_lr-4b.png){fig-align="center" width="50%"}
+![](./img/1kg_sv_lr-3a-sva.png){fig-align="center" width="60%"}
+
+<br>
+
+![](./img/1kg_sv_lr-4b.png){fig-align="center" width="30%"}
 
 :::
+
+:::notes
+- Another common mobile element was SVA: SINE-VNTR-ALU composed of different elements
 - SVAs are about 2-3kbp length elements
-- Within element, there is bias for head/tail transduction, but across elements is well-distributed
+- Within element, there was a bias for head/tail transduction, but across elements was well-distributed
 - Greater reference agreement compared to L1 activity
-- Subfamily is more entropic than L1
 :::
 
 ## Singular 5' L1 transduction
@@ -1402,7 +1662,8 @@ Transduction: element is copied and inserted elsewhere
 ::::
 
 :::notes
-- Takeaway: Transduciton is slightly CHR biased and many events are near ends of chromosome
+- The only 5' L1 source was investigated a bit more closely
+- Transduciton was slightly CHR biased and many events are near ends of chromosome
 - Source strand is reverse. Slight bias to forward strand targets
 :::
 
@@ -1411,8 +1672,9 @@ Transduction: element is copied and inserted elsewhere
 ![](./img/1kg_sv_lr-4de.png){fig-align="center"}
 
 :::notes
-- This L1 element is nearby a promoter and RNA-splicing may include the L1 element allow it to travel and recombine elsewhere
-- CAGE read counts measure TSS reads
+- When looking at the alignments in 21 samples,
+- This L1 element is nearby a promoter and RNA-splicing may include the L1 element allow it to get transcribed, travel, and recombine elsewhere
+- CAGE read counts measure TSS reads (RNA-seq)
 :::
 
 ## Breakpoint analysis
@@ -1422,8 +1684,8 @@ Transduction: element is copied and inserted elsewhere
 ![](./img/1kg_sv_lr-5a.png){fig-align="center"}
 
 :::notes
-- BLAST used to measure breakpoint homology
-- Word size is min. exact match
+- BLAST was used to measure breakpoint homology
+- Word size param is min. exact match
 :::
 
 ## Breakpoint homology
@@ -1431,8 +1693,7 @@ Transduction: element is copied and inserted elsewhere
 ![](./img/1kg_sv_lr-5b-annot.png){fig-align="center"}
 
 :::notes
-- Some SVs have characteristic lengths and breakpoint homologies: SDs and Alu do. VNTR not so much
-
+- Empirically, some SVs have characteristic lengths and breakpoint homologies: SDs and Alu do. VNTR not so much
 :::
 
 ## Breakpoint homology
@@ -1440,37 +1701,27 @@ Transduction: element is copied and inserted elsewhere
 ![](./img/1kg_sv_lr-5cd.png){fig-align="center"}
 
 :::notes
-- Takeaway: Homology by type agrees with mechanistic models
+- In general, homology by type agrees with mechanistic models
 - Example NHEJ (dark gray) has small homologies
 - SD (black) has large homologies; although these SVs are more rare
 - Takeaway 2: many SVs detected are smaller than median read size (20.3kbp)
 - Q: are smaller SVs more common or is this a technology bias?
 :::
 
-## Example DEL SV breakpoints
 
-<br>
-
-<br>
-
-![](./img/1kg_sv_lr-5ef.png){fig-align="center"}
-
-:::notes
-Again, ALU homologies are smaller than SD homologies
-:::
-
-## Recurrent ALU DEL
+<!-- ## Recurrent ALU DEL
 
 <br>
 
 ![](./img/1kg_sv_lr-5g.png){fig-align="center"}
 
 :::notes
-- Haplotype clustering by SNPs in a 100kbp window
+- The final primary analysis investigated a recurrent ALU DEL
+- Haplotypes clustering by SNPs occured in a 100kbp window
 - Clusters were biased to continent: i) EAS, ii) AFR, iii) SAS
 - DEL SV present in clusters 2 and 3 and 1 outlier sample
 - "Recurrence-indicating" SNPs highlighted in red. Maybe LD?
-:::
+::: -->
 
 ## 1KG SV LR summary
 
@@ -1491,16 +1742,16 @@ Again, ALU homologies are smaller than SD homologies
 
 <br>
 
-![](./img/1kg_sv_lr-2c.png){fig-align="center"}
+![](./img/1kg_sv_lr-2c.png){fig-align="center" width="60%"}
 :::
 :::{.column width="33%"}
 
 <br>
 
-![](./img/1kg_sv_lr-3a.png){fig-align="center"}
+![](./img/1kg_sv_lr-3a.png){fig-align="center" width="60%"}
 :::
 :::{.column width="33%"}
-![](./img/1kg_sv_lr-5cd.png){fig-align="center"}
+![](./img/1kg_sv_lr-5cd.png){fig-align="center" width="60%"}
 :::
 ::::
 
@@ -1521,13 +1772,13 @@ Again, ALU homologies are smaller than SD homologies
 
 ::::{.columns}
 :::{.column width="50%"}
-![](./img/1kg_sv_sr-1e.png){fig-align="center" width="70%"}
+![](./img/1kg_sv_sr-1e.png){fig-align="center" width="50%"}
 :::
 :::{.column width="50%"}
 
 <br>
 
-![](./img/1kg_sv_sr-2e.png){fig-align="center" width="70%"}
+![](./img/1kg_sv_sr-2e.png){fig-align="center" width="50%"}
 :::
 ::::
 
@@ -1561,8 +1812,7 @@ Again, ALU homologies are smaller than SD homologies
 
 :::{.center}
 
-![](./img/1kg_sv_lr-5b-annot.png){fig-align="center" width="60%"}
-![](./img/1kg_sv_sr-3c-labelled.png){fig-align="center" width="60%"}
+![](./img/1kg_sv_lr-5b-annot.png){fig-align="center" width="80%"}
 
 :::
 
@@ -1570,33 +1820,35 @@ Again, ALU homologies are smaller than SD homologies
 - Homology size of breakpoints depends on SV mechanism
 :::
 
-## SVs in pop. future work
+## SVs in pop. gaps
 
 :::{.center}
-- Joint seq-mechanism callers
-- Variant prioritization
-- Mobile element detection and inspection
+1. Mobile element detection and inspection
+2. Low VAF specialized analysis
+:::
+
+
+:::notes
+- Mobile elements cause a significant amount of SVs, yet majority of callers focus on DELs and copy number variants
+- Experimental wesults were often sensitive to low VAF. Correcting for and addressing low VAF SVs is important since rare SVs are more likley to be pathogenic than common SVs
+:::
+
+
+# SVs in cancer
+
+## Research gaps
+
+:::{.center}
+
+1. Complex/clustered SV event detection
+2. Developing, tuning, and using tools for specific cancer types
+
 :::
 
 :::notes
-- Leverage mechanistic models during call process rather than post-hoc annotation
-- Use large SV callsets as background control to prioritize SVs driving disease. If frequent in these cohorts, unlikely to drive disease
-- Mobile elements cause a significant amount of SVs, yet majority of callers focus on DELs and copy number variants
-:::
-
-## Chromothripsis v chromoplexy
-
-:::{.small}
-:::{.center}
-
-![](./img/chromothripsis-v-chromoplexy.webp){fig-align="center" width="50%"}
-
-| SV | Chromosome(s) | Copy number change |
-| ----- | ----- | ----- | ----- | ----- |
-| Chromothripsis | 1 or few | Relatively high |
-| Chromoplexiy | Usually multiple | Relatively low |
-
-:::
+- Clustered SV events (chromothripsis) tend to occur early in cancer. Therefore, it is important to detect and understand these events
+- As we will see, the driver variants vary heavily across tumor types. Yet, pan-cancer analysis is still a popular approach.
+- To address heterogenity of different cancer types, developing tumor-specific tools, or tuning them to cancer types seems necessary.
 :::
 
 ## PCAWG
@@ -1612,11 +1864,12 @@ Sections
 :::
 
 :::notes
-1. Variant caller evaluation (F1)
-2. Driver mutations (F2,3)
-3. Clustered variant event occurence and characteristics (F4,5)
-4. Germline and somatic variant associations (F6)
-5. Telomere mutations (F7)
+- Sections are
+- i) Variant caller evaluation 
+- ii) Driver mutations 
+- iii) Clustered variant event occurence and characteristics 
+- iv)  Germline and somatic variant associations 
+- v) Telomere mutations 
 
 :::
 
@@ -1629,7 +1882,9 @@ For 50 samples, deep sequencing of target (variant-site) probes
 ![](./img/pcawg-1ab.png){fig-align="center"}
 
 ::: notes
-Methods with good precision and recall (light blue) were selected
+- The pilot study evaluated variant calling in 50 samples
+- For TP, they deeply sequenced and used fluorescence methods to confirm variants.
+- Methods with good precision and recall (light blue) were selected for full study
 :::
 
 ## Low VAF challenges
@@ -1639,8 +1894,9 @@ Methods with good precision and recall (light blue) were selected
 ![](./img/pcawg-1cd.png){fig-align="center"}
 
 :::notes
-- Rare variants (low VAF) are hard to detect and false positives are common
-- intuitively, signal-noise ratio is smaller
+- Importantly performance was sensitive to VAF
+- Rare variants (low freq.) are hard to detect and false positives are common
+- Intuitively, signal-noise ratio is smaller
 :::
 
 ## Driver mutations
@@ -1648,8 +1904,10 @@ Methods with good precision and recall (light blue) were selected
 ![](./img/pcawg-2a.png){fig-align="center"}
 
 :::notes
-- Takeaway: severe cases have many types of SVs
-- Takeaway 2 (bar): most patients have driver coding point mutation or SCNA (gene variants)
+- This plot takes a while to understand, but the summary here is that
+- i) there are some outlier samples with large amount of SVs shown by the gray hist. colored sections are diff. tumor types
+- second takeaway (bar): most patients have driver coding point mutation or somatic copy number variants
+- GOTO NEXT
 - angle separates samples
 - outer:  sorted driver mutations per sample
 - ii) Whole genome duplication presence (both homologous chromosomes are duplicated, could be just one pair)
@@ -1666,10 +1924,11 @@ Methods with good precision and recall (light blue) were selected
 ![](./img/pcawg-2b.png){fig-align="center"}
 
 :::notes
+- There are some notable driver genes
 - Notable: TP53 is most common driver mutation, TERT also common (telomere repair)
-- Notable: cis-activating GR (GR=genomic rearrangement) prostate only ERG-TMPRSS2
-- Notable: fusion BRAF in melanoma and CNS-piloastro
-- Notable: many drivers deactivate tumor suppressing genes (TSG, light blue)
+- Notable: cis-activating GR (GR=genomic rearrangement) prostate only: ERG-TMPRSS2 dysregulation fusion
+- Notable: fusion of BRAF gene in melanoma and CNS-piloastro
+- altogether, many drivers deactivate tumor suppressing genes (TSG, light blue)
 :::
 
 ## TSG DEL drivers
@@ -1681,9 +1940,8 @@ TSG: tumor suppressor gene
 ![](./img/pcawg-2c.png){fig-align="center"}
 
 :::notes
-- Bottom value: # patients w/ bi-allelic DEL DIV total # patients w/ somatic VAR in gene
-- Notable: TP53 usually only heterozygous DEL
-- Takeaway: homozgyous DEL is relatively uncommon compared to heterozgyous DELs
+- Many driver genes were biallelicly altered. dual full DEL was rare, but DEL+coding mutation was common
+- Bottom value: # patients w/ bi-allelic mutation DIV total # patients w/ at least 1 allelic somatic gene mutation
 :::
 
 ## Missing driver investigation
@@ -1696,8 +1954,10 @@ TSG: tumor suppressor gene
 ![](./img/pcawg-3abc.png){fig-align="center"}
 
 :::notes
-- Takeaways: i) some samples' drivers were rescued after addressing tumor-in-normal contamination (a)
-- Takeaways: 2) for TERT-sensitive cancers many samples depth and purity was estimated insufficient to detect TERT mutations (bc)
+- 181 samples did not have driver mutations, so they investigated this and
+- i) some samples' drivers were rescued after addressing tumor-in-normal contamination (a)
+- ii) for TERT-sensitive cancers many samples depth and purity was estimated insufficient to detect TERT mutations (bc)
+- GOTO NEXT
 - a) contamination measured by variant allele frequency difference in tumor and normal
 - b) Estimated mutation detection sensitivity given purity and depth
 - Again, this was only done for samples w/o drivers
@@ -1705,15 +1965,37 @@ TSG: tumor suppressor gene
 
 :::
 
+## Chromothripsis v chromoplexy
+
+:::{.small}
+:::{.center}
+
+![](./img/chromothripsis-v-chromoplexy.webp){fig-align="center" width="50%"}
+
+| SV | Chromosome(s) | Copy number change |
+| ----- | ----- | ----- | ----- | ----- |
+| Chromothripsis | 1 or few | Relatively high |
+| Chromoplexy | Usually multiple | Relatively low |
+
+:::
+:::
+
+:::notes
+- A hallmark of cancer is clustered variant events: kataegis, chromoplexy, and chromothripsis
+:::
+
 ## Clustered variant events
 
 ![](./img/pcawg-4ab.png){fig-align="center"}
 
 :::notes
-- Takeaway a: Most kataaegis events were APOBEC3 type, except for lymphatic cancers
-- Takeaway a: chromoplexy less common than kataegis
-- Takeaway a: chromothripsis high variance across tumor types
-- Takeaway b: neighboring kataegis events are rare, but some occur near driver genes
+- For panel a, there were a few main findings
+- kataegies most common (clusters of SNPs)
+- chromothripsis had high variance across tumor types
+- most kataegis events were associated with APOBEC3 upregulation, except for lymphatic cancers
+- For panel b, 
+- neighboring kataegis events were relatively rare, but some occur near driver genes
+- NEXT
 - b: radius inv prop to dist of kataegis events
 - b: each dot is a kataegis event and its radial location is the distance to next event (sequential)
 - APOBE3B-type means up-regulated
@@ -1726,9 +2008,10 @@ TSG: tumor suppressor gene
 ![](./img/pcawg-4cd.png){fig-align="center"}
 
 :::notes
-- Takeaway c: neighboring chromoplexy events are even more rare than kataegis events
+- Neighboring chromoplexy events were even more rare than kataegis events
   - Fewer dots in shaded region
-- Takeaway d: chromothripsis events with smaller avg breakpoint in the SV cluster tend to cause CNV of driver genes
+- and panel d) shows that, chromothripsis events with smaller avg breakpoint in the SV cluster tend to cause CNV of driver genes
+  - Although the opacity of non-highlighted dots was quite low making it hard to confirm this trend
 :::
 
 ## Sub-clonal events occur later
@@ -1736,8 +2019,10 @@ TSG: tumor suppressor gene
 ![](./img/tumor-subclones.jpg){fig-align="center"}
 
 :::notes
-Clonal: mutation in most tumor cells
-Subclonal: mutation in subset of tumor cells
+- To understand timing of tumor mutations, 
+- They analyzed clonality
+- Clonal mutation: in most tumor cells
+- Subclonal mutation: in subset of tumor cells
 :::
 
 ## Clustered event timing
@@ -1746,8 +2031,7 @@ Subclonal: mutation in subset of tumor cells
 
 :::notes
 - Kataegis usually happened later
-- Chromothripsis sometimes happend early
-- Takeaway: more likely that chromothripsis is driving than kataegis
+- Chromothripsis tended to happen early and therefore may be an initial driver of cancer progression
 :::
 
 ## Chromothripsis at driver genes
@@ -1755,8 +2039,7 @@ Subclonal: mutation in subset of tumor cells
 ![](./img/pcawg-5b.png){fig-align="center"}
 
 :::notes
-- Takeaway: chromothripsis in melanoma led to copy number gains of TERT (telomere repair) and CCND1 (promotes S phase)
-- A lot SNPs (dots) and SVs (arcs)
+- An example of chromothripsis in melanoma led to copy number gains of TERT (telomere repair) and CCND1 (promotes S phase)
 :::
 
 ## Germline-somatic association
@@ -1764,7 +2047,8 @@ Subclonal: mutation in subset of tumor cells
 ![](./img/pcawg-6a.png){fig-align="center"}
 
 :::notes
-- Takeaway: 30 kbp germline DEL known to increase breast cancer risk
+- Next, they found only a few germline variants associated with somatic variants
+- For example, a 30 kbp germline SV DEL on CHR22 known to increase breast cancer risk
 :::
 
 
@@ -1773,15 +2057,17 @@ Subclonal: mutation in subset of tumor cells
 ![](./img/pcawg-6b.png){fig-align="center"}
 
 :::notes
-- BCRA1 (DNA repair) PTV SNPs are rare in germline, but when they do appear, many somatic SVs called template INS occurs
-- Takeaway: Long read sequencing example of somatic INS+DUP complex SV
+- Also, a PTV in germline enriched somatic SVs
+- BCRA1 (DNA repair) PTV SNPs are rare in germline, but when they do appear, somatic template INS SVs become more likely
+- This diagram shows the somatic variant
 :::
 
-## PTVs increasing somatic CpG SNPs
+## PTVs affecting somatic CpG SNPs
 
 ![](./img/pcawg-6c.png){fig-align="center"}
 
 :::notes
+- Also two germline PTVs changed somatic SNPs
 - Blue (BRCA2): germline PTV led to lower somatic mutation rates
 - Red (MBD4): germlinePTV led to higher somatic mutation rates
 - P-values are from regression two-sided hyp. test
@@ -1792,7 +2078,8 @@ Subclonal: mutation in subset of tumor cells
 ![](./img/pcawg-6d.png){fig-align="center"}
 
 :::notes
-- Takeaway: L1 loci previously known as hot have highest ranking individual contributions, but many non-hot elements contribute to somatic SVs too
+- Regarding mobile elements,
+- Found that L1 loci previously known as hot (blue/red) have highest ranking individual contributions, but many non-hot elements contribute to somatic SVs too
 :::
 
 ## Telomere tumor patterns
@@ -1804,9 +2091,12 @@ Features: #SVs, length tumor/normal, etc.
 ![](./img/pcawg-7ab.png){fig-align="center"}
 
 :::notes
+- Finally, they clustered cases by telomere features
+- Finding that most tumor samples fall into the T4 cluster
 - T: tumor
 - N: normal
-- Takeaway: Most tumor samples fall into the T4 cluster
+- Well, what feature describe T4?
+- NEXT
 - They analyzed telomere gene mutations for these clusters
 :::
 
@@ -1815,8 +2105,8 @@ Features: #SVs, length tumor/normal, etc.
 ![](./img/pcawg-7cd.png){fig-align="center"}
 
 :::notes
-- Takeaway c: cluster 4 mostly explained by SNP TERT mutations and RB1 (TSG) mutations
-- Takeaway d: TERT promoter SNVs or ATRX/DAXX mutations were common mutations in cancers known to have abnormal telomere regulation
+- cluster 4 mostly explained by SNP TERT mutations and RB1 (TSG) mutations
+- In panel d, they found TERT promoter SNVs or ATRX/DAXX mutations were common mutations in cancers known to have abnormal telomere regulation
 :::
 
 ## PCAWG summary
@@ -1837,15 +2127,24 @@ Features: #SVs, length tumor/normal, etc.
 
 ::::{.columns}
 :::{.column width="33%"}
-![](./img/pcawg-2b.png){fig-align="center"}
+![](./img/pcawg-2b.png){fig-align="center" width="70%"}
 :::
 :::{.column width="33%"}
-![](./img/pcawg-5a.png){fig-align="center"}
+![](./img/pcawg-5a.png){fig-align="center" width="70%"}
 :::
 :::{.column width="33%"}
-![](./img/pcawg-7cd.png){fig-align="center"}
+![](./img/pcawg-7cd.png){fig-align="center" width="70%"}
 :::
 ::::
+
+:::notes
+- In summary,
+- used deep seq. of a pilot set to select variant callers
+- Driver mutations tend to vary across tumors
+- Choromothripsis tends to occur early in cancer
+- The germline-somatic association was prevalent, but relatively small in this cohort
+- Telomere driven cancers vary in their mutational signature
+:::
 
 ## PCAWG SV
 
@@ -1857,16 +2156,24 @@ Sections
 3. SV features and signatures
 :::
 
+:::notes
+- Now, the PCAWG sibling paper focused on SVs investigated
+- SV types and frequency by tumor
+- Template INS SVs
+- And, abstract signatures of SVs
+:::
+
 ## SV types
 
 ![](./img/pcawg_sv-1.png){fig-align="center"}
 
 :::notes
-- "cut/copy" -> loss/gain in copy number
-- "simple/complex". complex usually has >2  breakpoints
-- SVs worth discussing
-  - local n-jump: DUPs and INVs
-  - Cyclic template INS: copy number gains with shared-chaining breakpoints
+- SVs were stratified into 4 groups
+- First split is "cut or copy" -> loss/gain in copy number
+- Second split is "simple or complex". complex usually has >2  breakpoints
+- New SVs worth discussing are 
+  - local n-jump: composed of DUPs and INVs
+  - Cyclic template INS are copy number gains with shared-chaining breakpoints
 :::
 
 ## SV tumor frequency
@@ -1874,10 +2181,13 @@ Sections
 ![](./img/pcawg_sv-2.png){fig-align="center"}
 
 :::notes
-- Takeaway a): Complex/unclassified SVs were typically most abundant, ii) DEL and tandem DUP were frequent simple types, and iii) some cancers with only a few samples had highest SV count (top value per subplot is # samples)
-- a) subpanels sorted by total SV count
-- Takeaway b): Esophagal cancers had a lot DEL, Tandem DUP, and complex SVs. And DELs dominanated highest SV count samples of Ovary
-- The majority of this paper is describing a few categories of complex SVs
+- The frequency of these types showed a few patterns
+- i) (a) Complex/unclassified SVs were most abundant
+- ii) (a) DEL and tandem DUP were frequent simple types
+- iii) some cancers with only a few samples had high cohort-wise SV count (top value per subplot is # samples)
+- subpanels sorted by total SV count
+- for panel b), esophagal cancers had a lot DEL, Tandem DUP, and complex SVs. And DELs dominanated highest SV count samples of Ovary
+- The remainder of this paper is mostly describing a few categories of complex SVs
 :::
 
 ## Template insertion SVs
@@ -1885,11 +2195,12 @@ Sections
 ![](./img/pcawg_sv-3abc.png){fig-align="center"}
 
 :::notes
-- a) Cycle: the sequence of SV breakpoints returns to source and the source copy is also gained
+- a) Cycle: the sequence of SV breakpoints that returns to source and the source copy is also gained
 - b) Chain: sequence of gains, but no return to source
 - c) Bridge: same as cycle, but the source copy is not gained (neutral)
 - Sequence path is resolved purely by breakpoints
 - Q: how do we know breakpoint chains are not just due to hotspot regions?
+- I would be interested to know the mutational burden on these breakpoint regions
 :::
 
 ## Liver TERT cycles
@@ -1897,7 +2208,8 @@ Sections
 ![](./img/pcawg_sv-3de.png){fig-align="center"}
 
 :::notes
-- Hypothesis: TERT amplification and inc. telomere resistance may be due to these template insertion cycle events
+- They observed cycle SV commonly in liver cancers involving the TERT gene
+- And hypothesized TERT amplification and inc. telomere resistance may be due to these template insertion cycle events
 :::
 
 ## Local n-jumps
@@ -1905,8 +2217,8 @@ Sections
 ![](./img/pcawg_sv-4ab.png){fig-align="center"}
 
 :::notes
-- Local n-jumps result in a copy # gain with an inverted segment
-- Takeaway: high counts of various jump types in different cancers
+- For local n-jumps,
+- high counts of various jump types occured in different cancers
 :::
 
 ## Bimodal size distributions
@@ -1914,7 +2226,8 @@ Sections
 ![](./img/pcawg_sv-5ab.png){fig-align="center"}
 
 :::notes
-- Takeaway: DEL and template INS SVs concentrate at two modes: 1kbp and 100kbp
+- Regarding SV sizes,
+- Both DEL and template INS SVs concentrate at two modes: 1kbp and 100kbp
 - 1kbp SVs may be due to mobile elements like L1 or SVA
 - 100kbp is quite large and not easily explained by mobile elements
 :::
@@ -1924,8 +2237,10 @@ Sections
 ![](./img/pcawg_sv-5c.png){fig-align="center"}
 
 :::notes
-- Takeaway: DEL and DUP often have opposite median shifts
-- Takeaway 2: small DELs left less likely than random, but large DELs more likley than random w.r.t gene regions
+- Looking at some SV features,
+- i) DEL and DUP often have opposite median shifts w.r.t features
+- ii) interestingly, w.r.t gene intersection small DELs were less likely than random, but large DELs were more likley than random
+- NEXT
 - star: means significant KS hypothesis test (not-uniform)
 - LAD: lamine association domain: associated with nuclear envelope management
 - Compared with quantile distribution of random SV placement
@@ -1936,8 +2251,9 @@ Sections
 ![](./img/pcawg_sv-5d.png){fig-align="center"}
 
 :::notes
-- Takeaway: smaller breakpoint homology was more likely
-- Unclear if peaks occured at bp sizes > 50 which might be due to mobile elements
+- Looking at breakpoint microhomology
+- smaller homology was more commonly observed
+- It's unclear if peaks occured at bp sizes > 50 which might be due to mobile elements as we saw in the 1KG papers
 :::
 
 ## Breakpoint element enrichment
@@ -1945,8 +2261,9 @@ Sections
 ![](./img/pcawg_sv-5e.png){fig-align="center"}
 
 :::notes
-- Takeaway 1: Enrichment of transduction/repeat elements (mobile/homologous)
-- Takeaway 2: Depletion of SVs connecting fragile regions and genes
+- For overlap of breakpoint and elements
+- there was enrichment of transduction/repeat elements (mobile/homologous) at both breakpoints
+- but intuitively, depletion of SVs connecting fragile regions and genes
 :::
 
 ## SV signatures
@@ -1954,12 +2271,14 @@ Sections
 ![](./img/pcawg_sv-6a.png){fig-align="center"}
 
 :::notes
-- Takeaway: Tandem DUPs often occur with other SV types
-- Takeaway: Chromoplexy events are more often cyclic events rather than chains. Meaning the source chromosome also has copy gain
-- Takeaway: INVs are crucial for fold-backs (Breakage fusion bridge)
+- Using signatures, they abstractly represented SV types
+- Some takeaways include
+- Tandem DUPs often occur with other SV types
+- Chromoplexy events are more often cyclic events rather than chains. Meaning the source chromosome also has copy gain
+- INVs are crucial for fold-backs (Breakage fusion bridge)
 - Columns: signatures
-- Rows: SV type, size, timing
-- Bar: how much SV class contributes to signature
+- Rows: features such as type, size, timing
+- Bar: how much SV feature contributes to signature
 :::
 
 ## Signature and tumor gene association
@@ -1969,7 +2288,9 @@ Sections
 ![](./img/pcawg_sv-6b.png){fig-align="center"}
 
 :::notes
-- Takeaway: BRCA1 associated with both DEL and DUP sigs, while BRCA2 is only associated with DEL sig. Again, these are both DNA repair genes
+- They regressed signatures onto binary variable of mutation status to test assoication of signatures and driver gene mutations
+- One thing I noticed was that BRCA1 associated with both DEL and DUP sigs, while BRCA2 is only associated with DEL sig. Interestingly, these are both DNA repair genes.
+- NEXT
 - Regression hypothesis test. Regresss signature intensity onto binary variable of mutation status
 :::
 
@@ -1988,82 +2309,18 @@ Sections
 
 ::::{.columns}
 :::{.column width="50%"}
-![](./img/pcawg_sv-1.png){width="70%"}
+![](./img/pcawg_sv-1.png){width="60%"}
 :::
 :::{.column width="50%"}
-![](./img/pcawg_sv-6a.png)
+![](./img/pcawg_sv-6a.png){width="60%"}
 :::
 ::::
 
-## SV cancer review
-
-:::{.center}
-Sections
-
-1. SV discovery methods
-2. Driver SVs
-3. Mechanisms
-:::
-
-## SV discovery methods
-
-:::{.small}
-:::{.center}
-
-| Method | Advantage | Limitation |
-| ----- | ----- | ----- |
-| Karyotyping | Chromosome-level & large SV events | Low res. |
-| Array CGH | Custom probes | Incomplete coverage |
-| SR WGS | High res. | Small read-context & mapping issues |
-| LR WGS | High res. & large read-context | Worse base pair accuracy |
-| SC | Phasing | Cell sampling bias & limited tooling |
-:::
-:::
-
-![](./img/sv_cancer_review-1.png){fig-align="center" width="50%"}
-
-
-## SV drivers and type
-
-![](./img/sv_cancer_review-2.png){fig-align="center"}
-
 :::notes
-- Takeaway a): Majority of driver SVs directly affect genes
-- Takeaway b): Some cancers have higher SV avg. per sample (top 2/3) than other cancers (bottom 1/3)
+- In summary,
+- the PCAWG SV paper described and quantified complex SVs in cancer
+- And, they used signatures to abstractly summarize SVs
 :::
-
-## SV mechanisms
-
-![](./img/sv_cancer_review-3.png){fig-align="center"}
-
-:::notes
-- Takeaway a): Some SVs have temporal dependence on precursor SVs
-  - Ex: C) Telomere event -> fusion ->  dicentric chromosome -> BFB
-:::
-
-## SV cancer review summary
-
-:::{.center}
-1. SV discovery method tradeoff
-2. Common driver types: coding SNPs and copy # changes
-3. SVs involving DNA repair genes have cascading effects
-:::
-
-::::{.columns}
-:::{.column width="33%"}
-![](./img/sv_cancer_review-1.png)
-:::
-:::{.column width="33%"}
-![](./img/sv_cancer_review-2.png){width="80%"}
-:::
-:::{.column width="33%"}
-![](./img/sv_cancer_review-3.png)
-:::
-::::
-
-## Summarize sections
-
-# Gene fusions
 
 ## PCAWG RNA
 
@@ -2076,24 +2333,34 @@ Sections
 4. DNA v RNA drivers
 :::
 
+:::notes
+- Now for PCAWG RNA,
+- The emphasis was on how gene expression changes during cancer
+- They looked at eQTL variants, alternative splicing, gene fusion, and compared DNA v RNA drivers
+:::
+
 ## eQTL variants
 
 ![](./img/pcawg_rna-1a.png){fig-align="center"}
 
 :::notes
-- Takeaway: for germline eQTL variants, the overlap with epigenetic regions was usually not sig. diff. from GTEx (non-tumor) cohort
+- Starting with germline variants
+- an enrichment test showed germline eQTL variants overlap with epigenetic regions was usually not sig. diff. from GTEx (a non-tumor) cohort
+- NEXT
 - procedure
   - i) find germline eQTL variants
   - ii) Quantified enriched overlap with epigenetic regions
   - iii) Compare enrichment with GTEx (non-tumor samples)
 :::
 
+
 ## Expression variance factors
 
 ![](./img/pcawg_rna-1b.png){fig-align="center"}
 
 :::notes
-- Takeaway: somatic copy number variants had largest effect on expression, surprisingly exon variants explained low expression variance
+- Looking at factor that explain expression variance
+- somatic copy number variants had largest effect on expression, surprisingly exon variants lowly explained expr. var.
 :::
 
 ## Bivalent promoter lead eQTL
@@ -2106,10 +2373,11 @@ Sections
 ![](./img/pcawg_rna-1c.png){fig-align="center"}
 
 :::notes
-- TEKT5: sperm mobility and integrity. relevant for testicular cancers
-- Takeaway: eQTLs were at a bivalent promoter.
-- Bivalent promoter: sensitive to either up/down-regulation
-- Takeaway: TEKT5 is usually subject to up/down-regulation
+- An example eQTL was in testicular cancer at a bivalent promoter
+- TEKT5: important for sperm mobility and integrity. therefore its expression is important in testes
+- This gene is known to be a driver in testicular cancer, likely a regulation swap with other driver genes
+- They found eQTLs were at a bivalent promoter.
+- Bivalent promoter means the gene is epigentically sensitive to either up/down-regulation
 :::
 
 ## Allelic expression imbalance
@@ -2117,8 +2385,9 @@ Sections
 ![](./img/allelic-expression-imbalance.png){fig-align="center"}
 
 :::notes
-- AEI: uneven expression of 2 different gene alleles
-- Here, CA haplotype has drives larger expression than TG haplotype
+- The next analysis is about allelic expression imbalance
+- It is uneven expression of 2 different gene alleles
+- In this example, the CA haplotype drives larger expression than TG haplotype
 :::
 
 ## Allelic expression imbalance
@@ -2126,7 +2395,8 @@ Sections
 ![](./img/pcawg_rna-1e.png){fig-align="center"}
 
 :::notes
-- Takeaway: somatic PTV SNPs ("stop-gained") variable had largest change in odds under a logistic regression model
+- Under a logistic regression model,
+- The variable changing log odds the most was somatic PTV SNPs ("stop-gained"), which makes sense
 :::
 
 ## Alternative splicing variants
@@ -2134,8 +2404,10 @@ Sections
 ![](./img/pcawg_rna-2a.png){fig-align="center"}
 
 :::notes
-- Takeaway: Variants near exon-intron boundaries are most likely to cause alternative splicing
+- Alternative splicing variants change how RNA is cut before translation into proteins
+- They found variants near exon-intron boundaries were most likely to cause alternative splicing
 - Dark blue: # of events associated with exon skipping
+- NEXT
 :::
 
 ## Alternative splicing variants
@@ -2144,7 +2416,8 @@ Sections
 ![](./img/pcawg_rna-2b.png){fig-align="center"}
 
 :::notes
-- Takeaway: Example somatic variant creating novel transcripts via exonization of intron
+- For example, a somatic variant was shown to cause exonization of an intron strictly in a tumor sample, not a matched-normal sample
+- NEXT
 - Red: tumor. Gray: non-tumor
 :::
 
@@ -2153,7 +2426,8 @@ Sections
 ![](./img/pcawg_rna-2c.png){fig-align="center"}
 
 :::notes
-- Takeaway: Reverse strand Alu elements commonly involved in splicing alternative variant events. Specifically, reverse strand transductions.
+- Interestingly, they found reverse strand Alu elements were commonly involved in splicing alternative variant events
+- Specifically, reverse strand transductions.
 :::
 
 ## Gene fusions
@@ -2161,7 +2435,8 @@ Sections
 ![](./img/pcawg_rna-3a.png){fig-align="center"}
 
 :::notes
-- Takeaway: majority of fusion calls were novel, small subset were recurrent (>1 individual)
+- Next, they analyzed gene fusions which sometimes drive cancer progression
+- The takeaway here is that the majority of fusion calls were novel, small subset were recurrent (>1 individual)
 :::
 
 ## Dual-translocation fusion
@@ -2169,7 +2444,8 @@ Sections
 ![](./img/pcawg_rna-3b.png){fig-align="center"}
 
 :::notes
-- Takeaway: fusions can occur on a chromosome non-native to either constituent gene
+- In particular, they highlighted an interesting fusion event
+- where a fusion occured on a chromosome non-native to either constituent gene
 - Here: ETV is from CHR12 & NTRK is from CHR15, yet they are both translocated to CHR6 resulting in a fusion.
 - Empirically, about 1/5 of fusions with SV evidence were of this type called "bridge fusions"
 :::
@@ -2179,9 +2455,10 @@ Sections
 ![](./img/pcawg_rna-4a.png)
 
 :::notes
-- Heiarchical clustering using alteration type counts per tumor
-- Takeaway i): alternative splicing variation across tumor types is extreme. Is this due to detection sensitivity or biology?
-- Takeaway ii): the heterogenity across tumor types for alteration counts is high. Tumor-wise analyses may be necessary
+- Overall, the alteration type tends to vary by tumor
+- In particular, alternative splicing variation across tumor types is extreme.
+- I wonder if this is this due to detection sensitivity or biology?
+- Overall, I think the heterogeniety in drivers and altertions by tumor type suggest tumor-wise analysis may be necessary to understand drivers
 :::
 
 ## Driver gene DNA & RNA alterations
@@ -2189,9 +2466,10 @@ Sections
 ![](./img/pcawg_rna-4d.png)
 
 :::notes
-- Driver gene is union of PCAWG and COSMIC driver genes
-- Takeaway i): RNA driver gene alterations are more common (green) than DNA driver gene alterations
-- Takeaway ii): Some driver genes are biased more toward DNA alterations or vice versa. Ex: TP53 tends to be driven by DNA alterations
+- Finally, comparing DNA and RNA alterations w.r.t driver genes
+- Here, driver genes is union of PCAWG and COSMIC driver genes
+- First, RNA driver gene alterations are more common (green) than DNA driver gene alterations (yellow)
+- Second, some driver genes are biased more toward DNA alterations or vice versa. Ex: TP53 tends to be driven by DNA alterations
 :::
 
 ## PCAWG RNA summary
@@ -2223,6 +2501,137 @@ Sections
 :::
 ::::
 
+:::notes
+- So, the PCAWG RNA paper showed
+- somatic copy number variants explained a lot of variation in gene expr.
+- somatic splice altering variants were biased toward exon-intron boundaries
+- characterized andn quantified "bridge fusions"
+- Found that driver gene alterations were sometimes biased toward DNA or RNA alterations
+:::
+
+## SV cancer review
+
+:::{.center}
+Sections
+
+1. SV discovery methods
+2. Driver SVs
+3. Mechanisms
+:::
+
+:::notes
+- The final cancer paper is a short review discussing
+- SV discovery methods
+- Driver SVs
+- and mechanisms
+:::
+
+## SV discovery methods
+
+:::{.small}
+:::{.center}
+
+| Method | Advantage | Limitation |
+| ----- | ----- | ----- |
+| Karyotyping | Chromosome-level & large SV events | Low res. |
+| Array CGH | Custom probes | Incomplete coverage |
+| SR WGS | High res. | Small read-context & mapping issues |
+| LR WGS | High res. & large read-context | Worse base pair accuracy |
+| SC | Phasing | Cell sampling bias & limited tooling |
+:::
+:::
+
+![](./img/sv_cancer_review-1.png){fig-align="center" width="50%"}
+
+:::notes
+- I've summarized the advantages and limiations of each SV discovery method here
+:::
+
+
+## SV drivers and type
+
+![](./img/sv_cancer_review-2.png){fig-align="center"}
+
+:::notes
+- They re-analyzed driver SVs in the PCAWG cohort and found
+- a): Majority of driver SVs directly affect genes
+- and b): some cancers have higher SV avg. per sample (top 2/3) than other cancers (bottom 1/3)
+:::
+
+
+## SV mechanisms
+
+![](./img/sv_cancer_review-3.png){fig-align="center"}
+
+:::notes
+- They also summarized mechansims of SVs which overlaps with the previous papers discussed
+- The major takeaway here is that
+- Some SVs have temporal dependence on precursor SVs
+  - Ex: C) Telomere event -> fusion ->  dicentric chromosome -> BFB
+:::
+
+
+
+## SV cancer review summary
+
+:::{.center}
+1. SV discovery method tradeoff
+2. Common driver types: coding SNPs and copy # changes
+3. SVs involving DNA repair genes have cascading effects
+:::
+
+::::{.columns}
+:::{.column width="33%"}
+![](./img/sv_cancer_review-1.png)
+:::
+:::{.column width="33%"}
+![](./img/sv_cancer_review-2.png){width="80%"}
+:::
+:::{.column width="33%"}
+![](./img/sv_cancer_review-3.png)
+:::
+::::
+
+:::notes
+- This paper was short, so I think we can skip the summary
+:::
+
+## Research gaps
+
+:::{.center}
+
+1. Complex/clustered SV event detection
+2. Developing, tuning, and using tools for specific cancer types
+
+:::
+
+:::notes
+- After looking over cancer variant papers, some research opportunities are
+- Clustered SV event detection
+- We saw chromothripsis seem to occur early in cancer. Therefore, it is important to detect and understand these events
+- And to address heterogenity of different cancer types, developing tumor-specific tools, or tuning them to cancer types seems necessary.
+:::
+
+# Gene fusions
+
+## Research gaps
+
+:::{.center}
+
+1. Recurrent fusion caller over multiple samples
+2. Resolving fusions as DNA/RNA driven
+
+:::
+
+:::notes
+- Now before getting into the papers, I want to pose some research opportunities for fusions
+- i) Since recurrent fusions are more likely to be drivers, a multi-sample caller could leverage single from multiple samples to inc. sens beyond 1 sample and find recurrent fusions.
+- ii) since fusions could occur solely as RNA events such as post-transcription splicing or read-through transcription, it would be useful to resolve the 2 cases
+- DNA mutations are not strictly necessary for fusion genes
+- Also, promoter/UTR exchanges may cause dysregulation, not an actual fusion protein
+:::
+
+
 ## Fusion benchmarking
 
 :::{.center}
@@ -2231,6 +2640,13 @@ Sections
 1. Fusion calling strategy and evaluation
 2. Simulation eval.
 3. Cancer cell line eval.
+:::
+
+:::notes
+- First, we will look at a popular fusion benchmarking paper
+- It summarizes fusion calling strategies and how evaluation is performed
+- Then experiments compare tools in simulated data and real cancer cell line data
+
 :::
 
 ## Fusion calling strategy
@@ -2243,8 +2659,10 @@ Sections
 ![](./img/fusion_bench-1a.png){fig-align="center"}
 
 :::notes
-- Takeaway: 2 core strategies: i) raw read alignemnt (short contigs) and ii) Transcript assembly then alignment
-- Takeaway 2: the units of fusion evidence are i) discordant/spanning reads and ii) split/junction reads
+- There are two strategy types to calling fusions
+- i) raw read alignemnt (short contigs)
+- ii) Transcript assembly then alignment
+- the units of fusion evidence are i) discordant/spanning reads and ii) split/junction reads
 - Discordant reads are specific to paired-end technology: each mate maps fully to another gene
 - Split reads are evidence in single or paired-end read techs: the read partially maps to both genes
 :::
@@ -2254,8 +2672,9 @@ Sections
 ![](./img/fusion_bench-1b.png){fig-align="center"}
 
 :::notes
-- Takeaway: Use classification metrics to compare tools and select parameters (e.g., min. supporting reads per call)
+- Evaluation is done via classification metrics to both compare tools and select parameters (e.g., min. supporting reads per call)
 - Problem: full truth set is typically unknown
+- NEXT
 - Precision = TP/ \hat{P}
 - Recall = TP / P
 - F1 combines recall and precision
@@ -2267,10 +2686,12 @@ Sections
 ![](./img/fusion_bench-2ab.png){fig-align="center"}
 
 :::notes
-- Takeaway a): read methods outperform the assembly methods (Trinity and Jaffa-assembly)
-- Takeaway a): Most methods performed better with longer read lengths, except SOAPFuse and Fusionhunter (older tools probably tuned to older seq. tech with smaller read lens)
-- Takeaway a): best performers were Arriba, pizzly, STAR-Fusion (highest auPRC)
-- Takeaway b): Higher fusion expression led to higher recall
+- However, in simulation the truth set is known
+- The performance summary here is that
+- read methods outperform the assembly methods (Trinity and Jaffa-assembly)
+- most methods performed better with longer read lengths, except SOAPFuse and Fusionhunter (older tools probably tuned to older seq. tech with smaller read lens)
+- overall best performers were Arriba, pizzly, STAR-Fusion (highest auPRC)
+- and panel b shows higher fusion expression led to higher recall
 :::
 
 ## Cell line evaluation
@@ -2282,13 +2703,17 @@ Sections
 ![](./img/fusion_bench-3ab.png){fig-align="center" width="60%"}
 
 :::notes
+- For real data, they started with 4 cell lines that had experimentally validated fusions
 - Only showing fusions called by 3 or more methods here
-- Takeaway a) recall highest for tools that performed best in simulated eval
-- Only 1 exp. val. fusion found by single method (FusionCatcher)
-- b) left VA is recall of validated fusions, bars
-- b) right VA is precision of ensemble calls (intersection), blue line
-- Takeaway b):  Precision asymptotes at about 10 caller agreement
-- Takeaway b): recall falls off at about 11 caller agreement
+- The key points are
+- recall was highest for tools that also performed best in simulated eval
+- Only 1 exp. val. fusion found by single method (FusionCatcher) (not shown by figure)
+- In panel b,
+- left VA is recall of validated fusions, bars
+- right VA is precision of ensemble calls (intersection), blue line
+- The horizontal axis varies a threshold of caller agreement
+- we see that precision asymptotes at about 10 caller agreement
+- recall falls off for caller agreement requirement greater than 11
 :::
 
 ## Cell line evaluation
@@ -2301,7 +2726,8 @@ Sections
 ![](./img/fusion_bench-4a.png){fig-align="center"}
 
 :::notes
-- Let caller agreement threshold vary from 1,...,23 and compute TP and FP for each case -> perf. dist.
+- To evaluate on cancer cell line data with unknown true fusions
+- They let caller agreement threshold vary from 1,...,23 and compute TP and FP for each case -> perf. dist.
 - Takeaway i): again STAR-Fusion and Arriba perform the best (raw read aligners) while assembly methods perform worst (Trinity)
 - Takeaway ii): Top and bottom rankings hardly vary as caller agreement threshold changes, but middle rankings do change
 :::
@@ -2311,8 +2737,9 @@ Sections
 ![](./img/fusion_bench-4b.png){fig-align="center"}
 
 :::notes
-- Takeaway i): Pizzly, STAR, and Arriba are also fastest alongside having high classification perf.
-- However, STAR 'kickstart' is no longer supported/recommended
+- In terms of runtime,
+- Pizzly, STAR, and Arriba are also fastest alongside having high classification perf.
+- However, STAR 'kickstart' is officially no longer supported/recommended as of today
 :::
 
 ## Cell line evaluation
@@ -2321,8 +2748,8 @@ Sections
 
 :::notes
 - At caller agreement = 7 definition of TP and FP,
-- Takeaway: STAR-Fusion has both high precision and recall. Arriba is a close second
-- Takeaway 2: The assembly-based mehods have high precision, but low recall.
+- STAR-Fusion has both high precision and recall. Arriba is a close second
+- The assembly-based mehods have high precision, but low recall.
 :::
 
 ## Fusion benchmark summary
@@ -2335,10 +2762,10 @@ Sections
 
 ::::{.columns}
 :::{.column width="50%"}
-![](./img/fusion_bench-4d.png)
+![](./img/fusion_bench-4d.png){width="60%"}
 :::
 :::{.column width="50%"}
-![](./img/fusion_bench-4b.png){width="55%"}
+![](./img/fusion_bench-4b.png){width="40%"}
 :::
 ::::
 
@@ -2351,12 +2778,18 @@ Sections
 2. Benchmarking
 :::
 
+:::notes
+- Now this STAR-Fusion paper is a pre-decessor to the benchmarking paper and is very similar
+- Therefore, I will focus on the new part: STAR-Fusion pipeline
+:::
+
 ## STAR-Fusion pipeline
 
 ![](./img/star_fusion-1.png){fig-align="center"}
 
 :::notes
-- Align reads
+- STAR-Fusion is conceptually simple
+- All rna-seq reads are aligned to reference
 - Count discordant & split reads involving genes
 - Apply various filters
 :::
@@ -2375,6 +2808,14 @@ Sections
 
 ![](./img/star_fusion-1.png){fig-align="center"}
 
+:::notes
+- Filters include 
+- Split read min. alignment size
+- Ignore minority breakpoint contributors, after defining a main breakpoint cluster
+- Homology
+- Promiscuous genes that have many fusion partners
+:::
+
 ## Evaluation
 
 :::{.center}
@@ -2387,9 +2828,24 @@ Sections
 - Same simul. and cell line data was used for evaluation. Similar results
 :::
 
-# Visualization
+## Research gaps
 
-## Motivation
+:::{.center}
+
+1. Recurrent fusion caller over multiple samples
+2. Resolving fusions as DNA/RNA driven
+
+:::
+
+:::notes
+- Again, I think calling over multiple samples has 2 advantages
+- i) fusions in multiple tumor samples implies the fusion is more likely to be a common driver
+- ii) calling over multiple samples jointly increases the total fusion signal which would increase sensitivity to sub-clonal fusions that may be overlooked by single sample callers
+- And as we've seen fusions can occur in different ways, so resolving the underlying mechanism is useful and essential for accurate detection
+:::
+
+
+# Visualization
 
 ## UCSC genome browser
 
@@ -2398,6 +2854,11 @@ Sections
 
 1. Jointly view omics annotations
 2. Efficiently view different resolutions
+:::
+
+:::notes
+Starting off for visualizaiton, the UCSC genome browser allows jointly viewing omics annotations and efficiently supports variable resolution
+:::
 
 ## Genome feature comparison
 
@@ -2412,12 +2873,15 @@ Sections
 
 ## Efficient variable resolution
 
+<br>
+
 ![](./img/ucsc-7.png){fig-align="center"}
 
 :::notes
+- This diagrams shows
 - Hierarchical feature indexing enables fast lookup
-- Features are indexed to the smallest bin that contains them
-- Takeaway: Can efficiently lookup relevant subset of features in a region or that intersect another feature
+- Features are indexed to the smallest bin that contains them to avoid redundancy
+- Takeaway: this scheme can efficiently lookup relevant subset of features in a region or that intersect another feature
 :::
 
 ## UCSC genome browser summary
@@ -2426,6 +2890,10 @@ Sections
 1. Efficiently view genomic features as tracks
 2. Pre-computed annotations available from web
 3. Updates support various genomic file format tracks
+:::
+
+:::notes
+- Again, this paper was short, so no need to summarize here.
 :::
 
 ## Samplot
@@ -2438,29 +2906,328 @@ Sections
 3. Image-driven SV filtering
 :::
 
+:::notes
+- samplot is designed specifically for viewing structural variants from alignment data
+- the paper covers
+- example samplots for various SV types
+- an interactive VCF mode
+- and automated SV false positive filtering using a CNN trained on samplot images
+:::
+
 ## DEL
 
+![](./img/samplot-1.png){fig-align="center"}
+
 :::notes
-- Takeaway: samplot can enables rapid verification of SV events
-- Uses tracks to view multiple forms of SV evidence
+- Samplot Uses tracks to view multiple forms of SV evidence
 - Track 1: short-read seq alignments
 - Alignment tracks directly show SV evidence at high resolution
   - Connected squares are discordant paired-end reads
   - Dashed lines are split reads
   - Grey background distribution is coverage (reads aligned per base)
-- Track 2: PacBio long-read seq alignments
-- Track 3: Repeat annotation
-- Track 4: Gene annotation with exons
+- Track 2: long-read seq alignments also supported
+- Track 3 and 4: annotation tracks are supported, such as repeats and gene transcripts
 :::
 
 ## DUP and INV
 
 
+![](./img/samplot-2.png){fig-align="center"}
+
+:::notes
+- The first fig. was a DEL, but samplot can delineate other SV types
+- a) DUP: inc. cov. & reads mapping from copy 1 to copy 2
+- b) INV: reads where reverse strand mate aligns before forward strand (abnormal) shown in blue
+- c) INV translocation: Blue read pairs spanning CHR 2 to CHR X
+:::
+
+## VCF browser
+
+![](./img/samplot-3.png){fig-align="center"}
+
+:::notes
+- Often, variants need to be compared across samples, such as a VCF
+- View multiple variants easily using tabular interface and multiple samples per plot
+:::
+
+## Automated filtering
+
+![](./img/samplot-4.png){fig-align="center"}
+
+:::notes
+- Idea: use samplot images for automated filtering of variant calls
+- A CNN was trained on samplot images to indicate true/false call
+- Experiment: DEL SV calls in short-read; use long-read verified SVs as truth
+- Dec. TP  means incorrectly filtered SV
+- Dec. FP means correctly filtered out SV
+- Compared against a rule-based method (duphold), SVM classifier (SV2), and ParaGraph (graph-based method)
+- Takeaway: samplot and duphold best retain TPs while reducing FPs
+- Takeaway d): A long-read model also effectively filtered out some FPs while retaining most TPs
+:::
+
+## Generalization
+
+![](./img/samplot-5a.png){fig-align="center"}
+
+:::notes
+- To see how samplot-ml genearlizes to other datasets and different seq. parameters, compared two seq runs of HG002.
+- Takeaway: Filtering is still performant in non-training samples and across different seq. params: COV and read length
+:::
+
+## Low allele freqency scenarios
+
+![](./img/samplot-5bc.png){fig-align="center"}
+
+:::notes
+- Variants can be at lower frequencies than expected by heterozygosity due to mosaicism (subset of cells) or somaticism (mixed-tumor-normal)
+- Experiment: in-silico mixing two samples to various allele ratios and see how many TPs are still retained after filtering
+- Takeaway: samplot substantially outperforms SV2 and slightly outperforms duphold, particularly when SVs are at lower allele frequencies
+:::
+
+## Samplot summary
+
+:::{.center}
+1. High resolution SV evidence viewer
+2. Delineates various SV types
+3. Automated filtering of false DEL SVs
+:::
+
+## IGV
+
+:::{.center}
+Sections
+
+1. Software architecture
+2. Application interface
+3. Track types
+4. Example uses
+:::
+
+## Software architecture
+
+![](./img/igv-1.png){fig-align="center"}
+
+:::notes
+- i) application layer: UI components
+- ii) data layer: parsing files and tile caching
+- iii) stream layer: efficient file lookup using indices
+:::
+
+## UI
+
+![](./img/igv-2.png){fig-align="center"}
+
+:::notes
+- Very similar to UCSC genome browser
+- Here, viewing multi-omics data: Chip (epigenetics) and WGS (DNA-seq)
+- Takeaway: again, we can jointly view annotations and raw data for hypothesis verification or generation
+:::
+
+## Clinical phenotypes
+
+![](./img/igv-3.png){fig-align="center"}
+
+:::notes
+- Jointly view clinical phenotypes for multiple samples
+:::
+
+## WGS viewer
+
+![](./img/igv-4.png){fig-align="center"}
+
+:::notes
+- Takeaway: top shows covergage colored bars indicate common mismatches
+- Takeaway: bottom has read-resolution (usually subset for high depth samples) and can show SNPs
+:::
+
+## RNA-seq viewer
+
+![](./img/igv-6.png){fig-align="center"}
+
+:::notes
+- Takeaway: ex: can view alignments to different transcript isoforms
+:::
+
+## Tumor copy num. variants
+
+![](./img/igv-7.png){fig-align="center"}
+
+:::notes
+- Takeaway: can simultaneously view copy number variants across samples and genes
+- 202 glioblastoma samples
+- 4 driver genes
+- Blue: deletion
+- Red: amplification
+:::
+
+## Fusion analysis
+
+![](./img/igv-8.png){fig-align="center"}
+
+:::notes
+- Takeaway: can compare interchromosomal fusion evidence across matched tumor/normal sample
+- Here, a glioblastoma sample has evidence of a fusion for UBR4 and TRDN strictly in the tumor sample
+:::
+
+## IGV summary
+
+:::{.center}
+1. Highly configurable omics & metadata viewer
+2. Use cases: isoform expression, multi-sample variation, matched tumor-normal variation
+:::
+
+::::{.columns}
+:::{.column width="50%"}
+![](./img/igv-6.png){fig-align="center" width="50%"}
+:::
+:::{.column width="50%"}
+![](./img/igv-1.png){fig-align="center" width="50%"}
+:::
+::::
+
+# Conclusion
 
 
+::::{.columns}
+:::{.column width="25%"}
+![](./img/lr_v_sr-sv_count.png){width="40%"}
+:::
+:::{.column width="25%"}
+<br>
+![](./img/cell_essential-loeuf.png)
+:::
+:::{.column width="50%"}
+<br>
+![](./img/pcawg_rna-4d.png)
+:::
+::::
 
+![](./img/samplot-1.png){fig-align="center" width="30%"}
 
+:::notes
+1. Longer reads -> more SVs detected
+2. Mutational constraint varies across genes
+3. Tumor driver genes can be biased toward DNA or RNA alterations
+4. Raw read fusion finders outperform transcript assemblers
+5. Simple SVs can be visualized but complex SVs are hard to visualized
+:::
 
 ## Appendix
 
 - [Papers](https://docs.google.com/document/d/1ITRce8UJdXp1rDq0sjtYXVW5guFNf2iaTkP0BkiCHbA/edit?usp=sharing)
+
+
+
+## What causes endogenous SVs?
+
+:::{.center}
+
+
+<br>
+
+**Homology**
+
+ATCGATCG **Seq. 1**
+<br>
+AACGAACG **Seq. 2**
+
+<br>
+
+**Repeats**
+
+TAAAAAAT **Seq. 1**
+<br>
+CAAAAAAT **Seq. 2**
+
+
+:::
+
+::: notes
+"Repeats" -> "replication failures".
+"Homology" -> "recombination"
+:::
+
+## NAHR summary
+
+<br>
+
+:::{.center}
+
+- Recombination at homologous, but non-matching loci
+- Breakpoints have large homology
+- Example: Smith-Magenis syndrome
+- Relatively high reurrency
+
+:::
+
+
+## Temple syndrome
+
+:::{.center}
+
+<br>
+
+- BIR SV: CHR 14 DUP
+- Symptoms
+  - Intellectual disabilities
+  - Early onset puberty
+
+:::
+
+## BIR summary
+
+- Replication template switching due to microhomology
+- Breakpoints show microhomology
+- Example: Temple syndrome; CHR 14 DUP-TRP/INV-DUP
+- Low recurrency
+
+## Pelizaeus-Merzbacher disease
+
+<br>
+
+:::{.center}
+
+- Mechanism: CHR X DUP; PLP1 gene
+- Symptoms:
+  - Involuntary movements
+  - Developmental delays
+:::
+
+## FoSTeS summary
+
+:::{.center}
+
+<br>
+
+- Template switching from one replication fork to another
+- Breakpoints have microhomology
+- Example: Pelizaeus-Merzbacher disease
+- Low recurrency
+
+:::
+
+## Complexity of 1bp context SNVs
+
+:::{.center}
+
+<br>
+
+- gnomAD considers SNVs with 1bp context
+  - A**C**G -> A**A**G OR A**T**G OR A**G**G
+- $4^3=64$ possible 3-mers
+- 3 possible SNVs per 3-mer
+- Total 3-mer SNVs is $64\cdot 3=192$
+
+
+
+:::
+
+## LOFTEE
+
+:::{.center}
+
+LOFTEE filter rate intuits with ClinVar annots., AF, and MAPS
+
+![](./img/gnomad-f2ab.png){fig-align="center" width="30%"}
+
+:::
